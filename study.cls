@@ -14,7 +14,7 @@
 % The Current Maintainer of this work is David Purton.
 %
 % This work consists of the files study.cls
-\ProvidesClass{study}[2020/05/22 Bible Study Class (DCP)]
+\ProvidesClass{study}[2020/05/25 Bible Study Class (DCP)]
 
 \RequirePackage{pdftexcmds}
 \RequirePackage{iftex}
@@ -551,120 +551,322 @@
 
   \RequirePackage{xparse}
   \RequirePackage{xpatch}
+
+
+  % Begin PDF form code
+
   \RequirePackage{l3pdf}
-  \RequirePackage[hidelinks]{hyperref}
-
-  \setlist[enumerate]{itemsep=0pt plus 0.5cm, before=\unpatchitem\patchitem,
-    after=\insaftertextfield}
-  \setlist[enumerate,1]{resume}
-  \setlist[itemize]{before=\unpatchitem, after=\patchitem}
-  \setlist[description]{before=\unpatchitem, after=\patchitem,
-    font=\normalfont\sbfseries}
-
 
   \ExplSyntaxOn
 
-  \pdf_object_new:nn { checkyes } { stream }
-  \pdf_object_new:nn { checkoff } { stream }
+  % # l3pdf extensions
 
-  \cs_new_nopar:Npx \checkyesref
+  \cs_new_protected:Npn \__study_pdf_catalog_gput:nn #1#2
+    { \exp_args:Nnx \__pdf_backend_catalog_gput:nn {#1} {#2} }
+
+  % ## l3pdf annotation extensions
+  \cs_new_protected:Npn \__study_pdf_annotation:nnnn #1#2#3#4
+    { \__pdf_backend_annotation:nnnn {#1} {#2} {#3} {#4} }
+  \cs_generate_variant:Nn \__study_pdf_annotation:nnnn { nnnx }
+  \cs_new:Npn \__study_pdf_annotation_last:
+    { \__pdf_backend_annotation_last: }
+
+  % # default font object
+
+  \pdf_object_new:nn { helv } { dict }
+  \pdf_object_write:nx { helv }
     {
-      \pdf_object_ref:n { checkyes }
+      /Type ~ /Font \iow_newline:
+      /Subtype ~ /Type1 \iow_newline:
+      /Name ~ /Helv \iow_newline:
+      /BaseFont ~ /Helvetica
     }
 
-  \cs_new_nopar:Npx \checkoffref
+  % # variables
+
+  % ## global variables
+  \clist_new:N \g__study_fields_clist
+  \int_new:N \g__study_field_id_count_int
+
+  % ## local variables
+  \clist_new:N \l__study_radio_obj_clist
+  \clist_new:N \l__study_radio_refs_clist
+  \int_new:N \l__study_radio_count_int
+  \tl_new:N \l__study_radio_id_tl
+
+  % # l3keys set up
+
+  \keys_define:nn { study }
     {
-      \pdf_object_ref:n { checkoff }
+      multiline    .bool_set:N       = \l__study_field_multiline_bool,
+      width        .dim_set:N        = \l__study_field_wd_dim,
+      width        .value_required:n = true,
+      height       .dim_set:N        = \l__study_field_ht_dim,
+      height       .value_required:n = true,
+      depth        .dim_set:N        = \l__study_field_dp_dim,
+      depth        .value_required:n = true,
     }
 
-  \NewDocumentCommand \addpdfstream { m m m }
+  % # appearance streams
+
+  \pdf_object_new:nn { yes } { stream }
+  \pdf_object_write:nx { yes }
     {
-      \pdf_object_write:nx { #1 } { { #2 } { #3 } }
+      {
+        /Type ~ /XObject \iow_newline:
+        /Subtype ~ /Form \iow_newline:
+        /FormType ~ 1 \iow_newline:
+        /BBox ~ [ ~ 0 ~ 0 ~ 10 ~ 10 ~ ] \iow_newline:
+        /Resources ~ << ~ /ProcSet ~ [ ~ /PDF ~ ] ~ >>
+      }
+      {
+        0.02 ~ 0.14 ~ 0 ~ 0 ~ k \iow_newline:
+        0 ~ 0 ~ 10 ~ 10 ~ re \iow_newline:
+        f \iow_newline:
+        0 ~ 0 ~ 0 ~ 1 ~ k \iow_newline:
+        2 ~ 2 ~ m \iow_newline:
+        8 ~ 8 ~ l \iow_newline:
+        2 ~ 8 ~ m \iow_newline:
+        8 ~ 2 ~ l \iow_newline:
+        s
+      }
     }
+
+  \pdf_object_new:nn { off } { stream }
+  \pdf_object_write:nx { off }
+    {
+      {
+        /Type ~ /XObject \iow_newline:
+        /Subtype ~ /Form \iow_newline:
+        /FormType ~ 1 \iow_newline:
+        /BBox ~ [ ~ 0 ~ 0 ~ 10 ~ 10 ~ ] \iow_newline:
+        /Resources ~ << ~ /ProcSet ~ [ ~ /PDF ~ ] ~ >>
+      }
+      {
+        0.02 ~ 0.14 ~ 0 ~ 0 ~ k \iow_newline:
+        0 ~ 0 ~ 10 ~ 10 ~ re \iow_newline:
+        f
+      }
+    }
+
+  \cs_new_protected:Nn \__study_text_field_ap:nn
+    {
+      \pdf_object_now:nx { stream }
+        {
+          {
+            /Type ~ /XObject \iow_newline:
+            /Subtype ~ /Form \iow_newline:
+            /BBox ~ [ ~ 0 ~ 0 ~
+              \dim_to_decimal_in_bp:n { #1 } ~
+              \dim_to_decimal_in_bp:n { #2 } ~ ] \iow_newline:
+            /Resources ~ << ~ /ProcSet ~ [ ~ /PDF ~ /Text ~ ] \iow_newline:
+              /Font ~ << ~ /Helv ~ \pdf_object_ref:n { helv } ~ >> \iow_newline:
+              >>
+          }
+          {
+            0.02 ~ 0.14 ~ 0 ~ 0 ~ k \iow_newline:
+            0 ~ 0 ~
+              \dim_to_decimal_in_bp:n { #1 } ~
+              \dim_to_decimal_in_bp:n { #2 } ~ re \iow_newline:
+            f
+          }
+        }
+    }
+
+  % # form set up
+
+  \cs_new_protected:Nn \__study_field_add_to_list:n
+    {
+      \clist_gput_right:Nx \g__study_fields_clist { #1 }
+    }
+
+  \cs_new_protected:Nn \__study_field_add_to_aux_file:n
+    {
+      \legacy_if:nT { @filesw }
+        {
+          \iow_shipout_x:Nn \@mainaux
+            {
+              \exp_not:n
+                {
+                  \csname ~ __study_field_add_to_list:n \endcsname { #1 }
+                }
+            }
+        }
+    }
+  \cs_generate_variant:Nn \__study_field_add_to_aux_file:n { x }
+
+  \cs_new_protected:Nn \__study_acroform:
+    {
+      \clist_if_empty:NF \g__study_field_annots_clist
+        {
+          \pdf_object_new:nn { acroform } { dict }
+          \pdf_object_write:nx { acroform }
+            {
+              /Fields ~ [ ~ \clist_use:Nn \g__study_fields_clist { ~ } ~ ] \iow_newline:
+              /DA ~ (/Helv ~ 7 ~ Tf ~ 0 ~ g) \iow_newline:
+              /DR ~ << ~ /Font ~ << ~
+                /Helv ~ \pdf_object_ref:n { helv } ~ >> ~ >>
+            }
+          \__study_pdf_catalog_gput:nn
+            { AcroForm }
+            { \pdf_object_ref:n { acroform } }
+        }
+    }
+
+  \AtEndDocument{\__study_acroform:}
+
+  % # field macros
+
+  \cs_new_protected:Nn \__study_checkbox_field:n
+    {
+      \group_begin:
+        \dim_set:Nn \l_tmpa_dim { \box_ht:N \strutbox }
+        \mode_leave_vertical:
+        \hbox_to_wd:nn
+          { \l_tmpa_dim }
+          {
+            \vrule width 0pt height 0.9 \l_tmpa_dim depth  0.1 \l_tmpa_dim
+            \__study_pdf_annotation:nnnx
+              { \dim_use:N \l_tmpa_dim }
+              { \dim_eval:n { 0.9 \l_tmpa_dim } }
+              { \dim_eval:n { 0.1 \l_tmpa_dim } }
+              {
+                /Subtype ~ /Widget \iow_newline:
+                /FT ~ /Btn \iow_newline:
+                /F ~ 4 \iow_newline:
+                /T ~ ( study_field_id_ \int_use:N \g__study_field_id_count_int ) \iow_newline:
+                /V ~ /Off \iow_newline:
+                /AS ~ /Off \iow_newline:
+                /AP ~ << \iow_newline:
+                  /D ~ << ~
+                    /Yes ~ \pdf_object_ref:n { yes } ~
+                    /Off ~ \pdf_object_ref:n { off } ~ >> \iow_newline:
+                  /N ~ << ~
+                    /Yes ~ \pdf_object_ref:n { yes } ~
+                    /Off ~ \pdf_object_ref:n { off } ~ >> \iow_newline:
+                  >>
+              }
+            \hfill
+          }
+        \tl_if_empty:nF { #1 }
+          {
+            \enskip
+            #1
+          }
+        \__study_field_add_to_aux_file:x { \__study_pdf_annotation_last: }
+        \int_gincr:N \g__study_field_id_count_int
+      \group_end:
+    }
+
+  \cs_new_protected:Nn \__study_radio_field:n
+    {
+      \group_begin:
+        \tl_set:Nn \l__study_radio_id_tl
+          { study_field_id_ \int_use:N \g__study_field_id_count_int }
+        \pdf_object_new:nn { \l__study_radio_id_tl } { dict }
+        \dim_set:Nn \l_tmpa_dim { \box_ht:N \strutbox }
+        \clist_clear:N \l__study_radio_refs_clist
+        \int_zero:N \l__study_radio_count_int
+        \clist_set:Nn \l__study_radio_obj_clist { #1 }
+        \mode_leave_vertical:
+        \clist_map_inline:Nn \l__study_radio_obj_clist
+          {
+            \hbox_to_wd:nn
+              { \l_tmpa_dim }
+              {
+                \vrule width 0pt height 0.9 \l_tmpa_dim depth  0.1 \l_tmpa_dim
+                \__study_pdf_annotation:nnnx
+                  { \dim_use:N \l_tmpa_dim }
+                  { \dim_eval:n { 0.9 \l_tmpa_dim } }
+                  { \dim_eval:n { 0.1 \l_tmpa_dim } }
+                  {
+                    /Subtype ~ /Widget \iow_newline:
+                    /Parent ~ \pdf_object_ref:n { \l__study_radio_id_tl } \iow_newline:
+                    /FT ~ /Btn \iow_newline:
+                    /F ~ 4 \iow_newline:
+                    /AS ~ /Off \iow_newline:
+                    /AP ~ << \iow_newline:
+                      /D ~ << ~
+                        /Yes \int_use:N \l__study_radio_count_int \c_space_tl \pdf_object_ref:n { yes } ~
+                        /Off ~ \pdf_object_ref:n { off } ~ >> \iow_newline:
+                      /N ~ << ~
+                        /Yes \int_use:N \l__study_radio_count_int \c_space_tl \pdf_object_ref:n { yes } ~
+                        /Off ~ \pdf_object_ref:n { off } ~ >> \iow_newline:
+                      >>
+                  }
+                \hfill
+              }
+            \clist_put_right:Nx \l__study_radio_refs_clist
+              { \__study_pdf_annotation_last: }
+            \int_incr:N \l__study_radio_count_int
+            \c_space_tl ##1 \enskip
+          }
+        \unskip
+        \pdf_object_write:nx
+          { \l__study_radio_id_tl }
+          {
+            /Kids ~ [ ~ \clist_use:Nn \l__study_radio_refs_clist { ~ } ~ ] \iow_newline:
+            /FT ~ /Btn \iow_newline:
+            /Ff ~ 49152 \iow_newline:
+            /T ~ ( \l__study_radio_id_tl ) \iow_newline:
+            /V ~ /Off
+          }
+        \__study_field_add_to_aux_file:x { \__study_pdf_annotation_last: }
+        \int_gincr:N \g__study_field_id_count_int
+      \group_end:
+    }
+
+  \cs_new_protected:Nn \__study_text_field:n
+    {
+      \group_begin:
+        \keys_set:nn { study }
+          {
+            multiline = false,
+            width     = 100bp ,
+            height    = \box_ht:N \strutbox ,
+            depth     = \box_dp:N \strutbox
+          }
+        \tl_if_empty:nF { #1 }
+          {
+            \keys_set:nn { study } { #1 }
+          }
+        \__study_text_field_ap:nn
+          { \l__study_field_wd_dim }
+          { \l__study_field_ht_dim + \l__study_field_dp_dim - \lineskip }
+        \mode_leave_vertical:
+        \hbox_to_wd:nn
+          { \l__study_field_wd_dim }
+          {
+            \vrule width 0pt height \l__study_field_ht_dim depth \l__study_field_dp_dim
+            \__study_pdf_annotation:nnnx
+              { \dim_use:N \l__study_field_wd_dim }
+              { \dim_eval:n { \l__study_field_ht_dim - 0.5 \lineskip } }
+              { \dim_eval:n { \l__study_field_dp_dim - 0.5 \lineskip } }
+              {
+                /Subtype ~ /Widget \iow_newline:
+                /FT ~ /Tx \iow_newline:
+                /F ~ 4 \iow_newline:
+                \bool_if:NT \l__study_field_multiline_bool
+                  {
+                    /Ff ~ 4096 \iow_newline:
+                  }
+                /T ~ ( study_field_id_ \int_use:N \g__study_field_id_count_int ) \iow_newline:
+                /MK ~ << ~ /BG ~ [ ~ 0.02 ~ 0.14 ~ 0 ~ 0 ~ ] ~ >> \iow_newline:
+                /AP ~ << ~ /N ~  \pdf_object_last: \c_space_tl >>
+              }
+            \hfill
+          }
+        \__study_field_add_to_aux_file:x { \__study_pdf_annotation_last: }
+        \int_gincr:N \g__study_field_id_count_int
+      \group_end:
+    }
+
+  % End PDF form code
 
   \bool_new:N \g__study_skip_after_text_field_bool
   \bool_new:N \g__study_item_patched_bool
   \bool_new:N \g__study_skip_next_text_field_bool
   \int_new:N \g__study_field_name_int
-
-  \cs_new_protected:Nn \__study_insert_check_field:n
-    {
-      \dim_set:Nn \l_tmpa_dim { \box_ht:N \strutbox }
-      \mode_leave_vertical:
-      \hbox:n
-        {
-          \CheckBox
-            [
-              name = study_field_id_ \int_use:N \g__study_field_name_int ,
-              borderwidth = 0pt ,
-              bordercolor = ,
-              backgroundcolor = 0.93 ~ 0.85 ~ 0.92 ,
-              width = \dim_use:N \l_tmpa_dim ,
-              height = \dim_use:N \l_tmpa_dim
-            ]
-            { }
-        }
-        \tl_if_blank:nF { #1 }
-          {
-            \enskip
-            #1
-          }
-      \int_gincr:N \g__study_field_name_int
-    }
-
-  \cs_new_protected:Nn \__study_insert_radio_field:n
-    {
-      \dim_set:Nn \l_tmpa_dim { \box_ht:N \strutbox }
-      \clist_set:Nn \l_tmpa_clist { #1 }
-      \clist_map_inline:Nn \l_tmpa_clist
-        {
-          \hbox:n
-            {
-              \ChoiceMenu
-                [
-                  name = study_field_id_ \int_use:N \g__study_field_name_int ,
-                  borderwidth = 0pt ,
-                  bordercolor = ,
-                  backgroundcolor = 0.93 ~ 0.85 ~ 0.92 ,
-                  width = \dim_use:N \l_tmpa_dim ,
-                  height = \dim_use:N \l_tmpa_dim ,
-                  radio,
-                  radiosymbol = \ding { 52 }
-                ]
-                { }
-                { ##1 }
-            }
-          \enskip
-        }
-        \unskip
-        \int_gincr:N \g__study_field_name_int
-    }
-
-  \cs_new_protected:Nn \__study_insert_text_field:n
-    {
-      \bool_if:NTF \g__study_skip_next_text_field_bool
-        {
-          \bool_gset_false:N \g__study_skip_next_text_field_bool
-        }
-        {
-          \dim_set:Nn \l_tmpa_dim { #1 }
-          \dim_set:Nn \l_tmpb_dim { \box_dp:N \strutbox + \box_ht:N \strutbox }
-          \enskip
-          \TextField
-            [
-              name = study_field_id_ \int_use:N \g__study_field_name_int ,
-              borderwidth = 0pt ,
-              bordercolor = ,
-              backgroundcolor = 0.93 ~ 0.85 ~ 0.92 ,
-              charsize = 8pt ,
-              width = \dim_use:N \l_tmpa_dim ,
-              height = \dim_use:N \l_tmpb_dim
-            ]
-            { }
-          \enskip
-          \int_gincr:N \g__study_field_name_int
-      }
-    }
 
   \cs_new_protected:Nn \__study_insert_text_field:
     {
@@ -674,24 +876,16 @@
         }
         {
           \par
-          \TextField
-            [
-              name = study_field_id_ \int_use:N \g__study_field_name_int ,
-              borderwidth = 0pt ,
-              multiline ,
-              bordercolor = ,
-              backgroundcolor = 0.93 ~ 0.85 ~ 0.92 ,
-              charsize = 8pt ,
-              width = \linewidth ,
-              height = \studyitemsep
-            ]
-            { }
-          \int_gincr:N \g__study_field_name_int
-          \vspace { 1mm plus 1.5cm }
-      }
+          \__study_text_field:n
+            {
+              multiline , width = \linewidth ,
+              depth = \dim_eval:n { \studyitemsep - 0.9 \box_ht:N \strutbox }
+            }
+          \skip_vertical:n { 1mm plus 1.5cm }
+        }
     }
 
-  \tex_let:D \__study_unpatched_item \item
+  \cs_set_eq:NN \__study_unpatched_item \item
 
   \cs_new_protected:Nn \__study_patch_item:
     {
@@ -736,7 +930,7 @@
 
   \NewDocumentCommand \unpatchitem { }
     {
-      \tex_let:D \item \__study_unpatched_item
+      \cs_set_eq:NN \item \__study_unpatched_item
       \bool_gset_false:N \g__study_item_patched_bool
     }
 
@@ -745,24 +939,32 @@
       \bool_gset_true:N \g__study_skip_next_text_field_bool
     }
 
-  \RenewDocumentCommand \gap { O{3cm} }
+  \RenewDocumentCommand \gap { O { 3cm } }
     {
-      \__study_insert_text_field:n { #1 }
+      \bool_if:NTF \g__study_skip_next_text_field_bool
+        {
+          \bool_gset_false:N \g__study_skip_next_text_field_bool
+        }
+        {
+          \enskip
+          \__study_text_field:n { width = #1 }
+          \enskip
+        }
     }
 
   \RenewDocumentCommand \truefalse { }
     {
-      \__study_insert_radio_field:n { True, False }
+      \__study_radio_field:n { True, False }
     }
 
   \RenewDocumentCommand \checkbox { o }
     {
       \IfNoValueTF { #1 }
         {
-          \__study_insert_check_field:n { }
+          \__study_checkbox_field:n { }
         }
         {
-          \__study_insert_check_field:n { #1 }
+          \__study_checkbox_field:n { #1 }
         }
     }
 
@@ -774,36 +976,15 @@
 
   \ExplSyntaxOff
 
-  \addpdfstream{checkyes}{%
-    /BBox [ 0 0 13.948 15.99 ]
-    /FormType 1
-    /Resources <<  /ProcSet [ /PDF ] >>
-    /Subtype /Form
-    /Type /XObject}{%
-    q Q}
-
-  \addpdfstream{checkoff}{%
-    /BBox [ 0 0 13.948 15.99 ]
-    /FormType 1
-    /Resources <<  /ProcSet [ /PDF ] >>
-    /Subtype /Form
-    /Type /XObject}{%
-    q Q}
-
-  \xpatchcmd{\PDFForm@Check}
-    {/AP<< /N <</Yes<<>>>> >>}
-    {/AP<< /N <</Yes \checkyesref /Off \checkoffref >> >>}
-    {}
-    {}
+  \setlist[enumerate]{itemsep=0pt plus 0.5cm, before=\unpatchitem\patchitem,
+    after=\insaftertextfield}
+  \setlist[enumerate,1]{resume}
+  \setlist[itemize]{before=\unpatchitem, after=\patchitem}
+  \setlist[description]{before=\unpatchitem, after=\patchitem,
+    font=\normalfont\sbfseries}
 
   \let\skipanswerspace\skipnexttextfield
   \let\skipafterenumspace\skipnexttextfield
-
-  \renewcommand*{\LayoutTextField}[2]{%
-    \raisebox{\ht\strutbox}{\raisebox{-\height+0.5pt}{#2}}}
-
-  \AtBeginDocument{\begin{Form}}
-  \AtEndDocument{\end{Form}}
 
 \fi
 

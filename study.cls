@@ -926,15 +926,13 @@
     {
       \bool_if:NF \g__study_skip_after_text_field_bool
         {
-          \__study_insert_text_field:
+          \strut
+          \hfill
+          \showthe\aftertextfieldwidth
+          \__study_insert_text_field:n { \aftertextfieldwidth }
           \bool_gset_true:N \g__study_skip_after_text_field_bool
           \bool_gset_true:N \g__study_skip_next_text_field_bool
         }
-    }
-
-  \NewDocumentCommand \instextfield { }
-    {
-      \__study_insert_text_field:
     }
 
   \NewDocumentCommand \patchitem { }

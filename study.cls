@@ -990,7 +990,7 @@
   \ExplSyntaxOff
 
   \setlist[enumerate]{itemsep=0pt plus 0.5cm, before=\unpatchitem\patchitem,
-    after=\insaftertextfield}
+    after=\aftergroup\insaftertextfield}
   \setlist[enumerate,1]{resume}
   \setlist[itemize]{before=\unpatchitem, after=\patchitem}
   \setlist[description]{before=\unpatchitem, after=\patchitem,

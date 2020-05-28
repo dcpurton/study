@@ -873,17 +873,17 @@
   \bool_new:N \g__study_skip_next_text_field_bool
   \int_new:N \g__study_field_name_int
 
-  \cs_new_protected:Nn \__study_insert_text_field:n
+  \cs_new_protected:Nn \__study_insert_text_field:
     {
       \bool_if:NTF \g__study_skip_next_text_field_bool
         {
           \bool_gset_false:N \g__study_skip_next_text_field_bool
         }
         {
+          \par
           \__study_text_field:n
             {
-              multiline ,
-              width = \dim_eval:n { #1 } ,
+              multiline , width = \linewidth ,
               depth = \dim_eval:n { \studyitemsep - 0.9 \box_ht:N \strutbox }
             }
           \cs_if_eq:NNTF \\ \tabularnewline
@@ -911,8 +911,7 @@
                   \bool_gset_false:N \g__study_skip_next_text_field_bool
                 }
                 {
-                  \par
-                  \__study_insert_text_field:n { \linewidth }
+                  \__study_insert_text_field:
                 }
                 \bool_gset_false:N \g__study_skip_after_text_field_bool
             }
@@ -983,16 +982,13 @@
   \RenewDocumentCommand \addanswerspace { }
     {
       \bool_set_false:N \g__study_skip_next_text_field_bool
-      \par
-      \__study_insert_text_field:n { \linewidth }
+      \__study_insert_text_field:
     }
 
   \ExplSyntaxOff
 
-  \newlength{\aftertextfieldwidth}
-
   \setlist[enumerate]{itemsep=0pt plus 0.5cm, before=\unpatchitem\patchitem,
-    after=\global\aftertextfieldwidth\linewidth\aftergroup\insaftertextfield}
+    after=\aftergroup\insaftertextfield}
   \setlist[enumerate,1]{resume}
   \setlist[itemize]{before=\unpatchitem, after=\patchitem}
   \setlist[description]{before=\unpatchitem, after=\patchitem,

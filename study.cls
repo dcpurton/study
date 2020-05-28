@@ -881,11 +881,6 @@
           \skip_vertical:n { 0mm plus 15mm }
         }
         {
-          \cs_if_eq:NNF \\ \tabularnewline
-            {
-              \unskip
-              \skip_vertical:n { 1mm }
-            }
           \par
           \__study_text_field:n
             {

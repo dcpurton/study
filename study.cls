@@ -878,8 +878,14 @@
       \bool_if:NTF \g__study_skip_next_text_field_bool
         {
           \bool_gset_false:N \g__study_skip_next_text_field_bool
+          \skip_vertical:n { 0mm plus 15mm }
         }
         {
+          \cs_if_eq:NNF \\ \tabularnewline
+            {
+              \unskip
+              \skip_vertical:n { 1mm }
+            }
           \par
           \__study_text_field:n
             {
@@ -989,8 +995,12 @@
 
   \ExplSyntaxOff
 
-  \setlist[enumerate]{itemsep=0pt plus 0.5cm, before=\unpatchitem\patchitem,
-    after=\insaftertextfield}
+  \newcommand*{\insaftertextfieldspace}{%
+    \vspace{0pt plus 7.5mm}%
+  }
+
+  \setlist[enumerate]{itemsep=0pt, before=\unpatchitem\patchitem,
+    after=\insaftertextfield\aftergroup\insaftertextfieldspace}
   \setlist[enumerate,1]{resume}
   \setlist[itemize]{before=\unpatchitem, after=\patchitem}
   \setlist[description]{before=\unpatchitem, after=\patchitem,

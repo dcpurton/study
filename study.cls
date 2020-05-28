@@ -14,7 +14,7 @@
 % The Current Maintainer of this work is David Purton.
 %
 % This work consists of the files study.cls
-\ProvidesClass{study}[2020/05/25 Bible Study Class (DCP)]
+\ProvidesClass{study}[2020/05/28 Bible Study Class (DCP)]
 
 \RequirePackage{pdftexcmds}
 \RequirePackage{iftex}
@@ -291,7 +291,12 @@
 \fi
 \newcommand{\skipanswerspace}{\vspace{\multlength{\studyitemsep}{-1}}}
 \newcommand{\skipafterenumspace}{\vspace{\multlength{\studyitemsep}{-4/5}}}
-\newcommand{\addanswerspace}{\vspace{\studyitemsep}}
+\newcommand{\addanswerspace}{%
+  \ifx\\\tabularnewline
+    \vrule width 0pt depth \studyitemsep
+  \else
+    \vspace{\studyitemsep}%
+  \fi}
 \newcommand{\multlength}[2]{%
     \glueexpr#1*#2}
 \setlist[enumerate]{itemsep=\studyitemsep}
@@ -881,7 +886,15 @@
               multiline , width = \linewidth ,
               depth = \dim_eval:n { \studyitemsep - 0.9 \box_ht:N \strutbox }
             }
-          \skip_vertical:n { 1mm plus 1.5cm }
+          \cs_if_eq:NNTF \\ \tabularnewline
+            {
+              \vrule
+                width 0pt
+                depth \dim_eval:n { \studyitemsep - 0.9 \box_ht:N \strutbox + 1mm }
+            }
+            {
+              \skip_vertical:n { 1mm plus 15mm }
+            }
         }
     }
 

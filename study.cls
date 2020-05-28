@@ -299,8 +299,8 @@
   \fi}
 \newcommand{\multlength}[2]{%
     \glueexpr#1*#2}
-\setlist[enumerate]{itemsep=\studyitemsep}
-\setlist[enumerate,1]{resume,after=\vspace{\multlength{\studyitemsep}{4/5}}}
+\setlist[enumerate]{itemsep=\studyitemsep, partopsep=0pt}
+\setlist[enumerate,1]{resume, after=\vspace{\multlength{\studyitemsep}{4/5}}}
 \setlist[description]{font=\normalfont\sbfseries}
 \setlist[itemize]{itemsep=0ex, leftmargin=7mm}
 \renewcommand\arraystretch{1.2}
@@ -926,9 +926,9 @@
     {
       \bool_if:NF \g__study_skip_after_text_field_bool
         {
+          \skip_vertical:n { \afterbeforeskip }
           \strut
           \hfill
-          \showthe\aftertextfieldwidth
           \__study_insert_text_field:n { \aftertextfieldwidth }
           \bool_gset_true:N \g__study_skip_after_text_field_bool
           \bool_gset_true:N \g__study_skip_next_text_field_bool
@@ -989,12 +989,20 @@
 
   \ExplSyntaxOff
 
+  \newlength{\afterbeforeskip}
   \newlength{\aftertextfieldwidth}
 
-  \setlist[enumerate]{itemsep=0pt plus 0.5cm, before=\unpatchitem\patchitem,
-    after=\global\aftertextfieldwidth\linewidth\aftergroup\insaftertextfield}
+  \setlist[enumerate]{itemsep=0pt plus 5mm, partopsep=0pt,
+    before=\unpatchitem\patchitem,
+    after={\global\aftertextfieldwidth\linewidth
+      \global\afterbeforeskip\dimexpr-\parsep-\topsep-\partopsep
+      \ifnum\@listdepth=\@ne
+        \global\advance\afterbeforeskip 6pt
+      \fi
+      \aftergroup\insaftertextfield}}
   \setlist[enumerate,1]{resume}
-  \setlist[itemize]{before=\unpatchitem, after=\patchitem}
+  \setlist[itemize]{itemsep=0ex, leftmargin=7mm,
+    before=\unpatchitem, after=\patchitem}
   \setlist[description]{before=\unpatchitem, after=\patchitem,
     font=\normalfont\sbfseries}
 

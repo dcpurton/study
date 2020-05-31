@@ -14,7 +14,7 @@
 % The Current Maintainer of this work is David Purton.
 %
 % This work consists of the files study.cls
-\ProvidesClass{study}[2020/05/28 Bible Study Class (DCP)]
+\ProvidesClass{study}[2020/06/01 Bible Study Class (DCP)]
 
 \RequirePackage{pdftexcmds}
 \RequirePackage{iftex}
@@ -243,8 +243,6 @@
 \newcolumntype{L}{>{\raggedright\arraybackslash}X}
 \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 \newcolumntype{C}{>{\centering\arraybackslash}X}
-
-\newcommand{\gap}[1][3cm plus 1cm minus 1cm]{\strut\nobreak\leaders\hrule\hskip #1\strut}
 
 \newcommand{\truefalse}{True \slash{} False}
 
@@ -603,6 +601,8 @@
 
   \keys_define:nn { study }
     {
+      text         .tl_set:N        = \l__study_field_text_tl,
+      text         .value_required:n = true,
       multiline    .bool_set:N       = \l__study_field_multiline_bool,
       width        .dim_set:N        = \l__study_field_wd_dim,
       width        .value_required:n = true,
@@ -654,7 +654,7 @@
       }
     }
 
-  \cs_new_protected:Nn \__study_text_field_ap:nn
+  \cs_new_protected:Nn \__study_text_field_ap:nnn
     {
       \pdf_object_now:nx { stream }
         {
@@ -662,8 +662,8 @@
             /Type ~ /XObject \iow_newline:
             /Subtype ~ /Form \iow_newline:
             /BBox ~ [ ~ 0 ~ 0 ~
-              \dim_to_decimal_in_bp:n { #1 } ~
-              \dim_to_decimal_in_bp:n { #2 } ~ ] \iow_newline:
+              \dim_to_decimal_in_bp:n { #2 } ~
+              \dim_to_decimal_in_bp:n { #3 } ~ ] \iow_newline:
             /Resources ~ << ~ /ProcSet ~ [ ~ /PDF ~ /Text ~ ] \iow_newline:
               /Font ~ << ~ /Helv ~ \pdf_object_ref:n { helv } ~ >> \iow_newline:
               >>
@@ -671,12 +671,31 @@
           {
             0.02 ~ 0.14 ~ 0 ~ 0 ~ k \iow_newline:
             0 ~ 0 ~
-              \dim_to_decimal_in_bp:n { #1 } ~
-              \dim_to_decimal_in_bp:n { #2 } ~ re \iow_newline:
+              \dim_to_decimal_in_bp:n { #2 } ~
+              \dim_to_decimal_in_bp:n { #3 } ~ re \iow_newline:
             f
+            \tl_if_empty:nF { #1 }
+              {
+                \iow_newline:
+                /Tx ~ BMC \iow_newline:
+                q \iow_newline:
+                1 ~ 1 ~
+                  \dim_to_decimal_in_bp:n { #2 - 2bp } ~
+                  \dim_to_decimal_in_bp:n { #3 - 2bp } ~ re \iow_newline:
+                W ~ n \iow_newline:
+                BT \iow_newline:
+                /Helv ~ 7 ~ Tf \iow_newline:
+                0 ~ g \iow_newline:
+                2 ~ \dim_to_decimal_in_bp:n { #3 - 8bp } ~ Td \iow_newline:
+                ( #1 ) ~ Tj \iow_newline:
+                ET \iow_newline:
+                Q \iow_newline:
+                EMC
+              }
           }
         }
     }
+  \cs_generate_variant:Nn \__study_text_field_ap:nnn { xnn }
 
   % # form set up
 
@@ -826,8 +845,9 @@
       \group_begin:
         \keys_set:nn { study }
           {
+            text      = {},
             multiline = false,
-            width     = 100bp ,
+            width     = 3cm ,
             height    = \box_ht:N \strutbox ,
             depth     = \box_dp:N \strutbox
           }
@@ -835,7 +855,8 @@
           {
             \keys_set:nn { study } { #1 }
           }
-        \__study_text_field_ap:nn
+        \__study_text_field_ap:xnn
+          { \l__study_field_text_tl }
           { \l__study_field_wd_dim }
           { \l__study_field_ht_dim + \l__study_field_dp_dim - \lineskip }
         \mode_leave_vertical:
@@ -856,6 +877,10 @@
                     /Ff ~ 4096 \iow_newline:
                   }
                 /T ~ ( study_field_id_ \int_use:N \g__study_field_id_count_int ) \iow_newline:
+                \tl_if_empty:NF \l__study_field_text_tl
+                  {
+                    /V ~ ( \l__study_field_text_tl ) \iow_newline:
+                  }
                 /MK ~ << ~ /BG ~ [ ~ 0.02 ~ 0.14 ~ 0 ~ 0 ~ ] ~ >> \iow_newline:
                 /AP ~ << ~ /N ~  \pdf_object_last: \c_space_tl >>
               }
@@ -953,15 +978,16 @@
       \bool_gset_true:N \g__study_skip_next_text_field_bool
     }
 
-  \RenewDocumentCommand \gap { O { 3cm } }
+  \NewDocumentCommand \gap { O { } }
     {
       \bool_if:NTF \g__study_skip_next_text_field_bool
         {
           \bool_gset_false:N \g__study_skip_next_text_field_bool
         }
         {
-          \enskip
-          \__study_text_field:n { width = #1 }
+          \mode_if_horizontal:T
+            { \enskip }
+          \__study_text_field:n { #1 }
           \enskip
         }
     }
@@ -1003,6 +1029,43 @@
 
   \let\skipanswerspace\skipnexttextfield
   \let\skipafterenumspace\skipnexttextfield
+
+\else
+
+  \ExplSyntaxOn
+
+  \keys_define:nn { study }
+    {
+      text         .tl_set:N        = \l__study_field_text_tl,
+      text         .value_required:n = true,
+      width        .skip_set:N        = \l__study_field_wd_skip,
+      width        .value_required:n = true,
+    }
+
+    \NewDocumentCommand \gap { O { } }
+      {
+        \keys_set:nn { study }
+          {
+            text = {},
+            width = 3cm plus 1cm minus 1cm
+          }
+        \tl_if_empty:nF { #1 }
+          {
+            \keys_set:nn { study } { #1 }
+          }
+        \strut
+        \nobreak
+        \tl_if_empty:NF \l__study_field_text_tl
+          {
+            \hbox_overlap_right:n { \l__study_field_text_tl }
+          }
+        \leaders
+        \hrule
+        \skip_horizontal:N \l__study_field_wd_skip
+        \strut
+      }
+
+  \ExplSyntaxOff
 
 \fi
 

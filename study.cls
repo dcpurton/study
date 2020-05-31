@@ -661,11 +661,19 @@
           {
             /Type ~ /XObject \iow_newline:
             /Subtype ~ /Form \iow_newline:
+            /Matrix ~ [ ~ 1 ~ 0 ~ 0 ~ 1 ~ 0 ~ 0 ~ ] \iow_newline:
             /BBox ~ [ ~ 0 ~ 0 ~
               \dim_to_decimal_in_bp:n { #2 } ~
               \dim_to_decimal_in_bp:n { #3 } ~ ] \iow_newline:
-            /Resources ~ << ~ /ProcSet ~ [ ~ /PDF ~ /Text ~ ] \iow_newline:
-              /Font ~ << ~ /Helv ~ \pdf_object_ref:n { helv } ~ >> \iow_newline:
+            /Resources ~ << ~\iow_newline:
+              \tl_if_empty:nTF { #1 }
+                {
+                  /ProcSet ~ [ ~ /PDF ~ ] \iow_newline:
+                }
+                {
+                  /ProcSet ~ [ ~ /PDF ~ /Text ~ ] \iow_newline:
+                  /Font ~ << ~ /Helv ~ \pdf_object_ref:n { helv } ~ >> \iow_newline:
+                }
               >>
           }
           {
@@ -684,7 +692,7 @@
                   \dim_to_decimal_in_bp:n { #3 - 2bp } ~ re \iow_newline:
                 W ~ n \iow_newline:
                 BT \iow_newline:
-                /Helv ~ 7 ~ Tf \iow_newline:
+                /Helv ~ 8 ~ Tf \iow_newline:
                 0 ~ g \iow_newline:
                 2 ~ \dim_to_decimal_in_bp:n { #3 - 8bp } ~ Td \iow_newline:
                 ( #1 ) ~ Tj \iow_newline:
@@ -727,7 +735,7 @@
           \pdf_object_write:nx { acroform }
             {
               /Fields ~ [ ~ \clist_use:Nn \g__study_fields_clist { ~ } ~ ] \iow_newline:
-              /DA ~ (/Helv ~ 7 ~ Tf ~ 0 ~ g) \iow_newline:
+              /DA ~ (/Helv ~ 0 ~ Tf ~ 0 ~ g) \iow_newline:
               /DR ~ << ~ /Font ~ << ~
                 /Helv ~ \pdf_object_ref:n { helv } ~ >> ~ >>
             }
@@ -869,8 +877,10 @@
               { \dim_eval:n { \l__study_field_ht_dim - 0.5 \lineskip } }
               { \dim_eval:n { \l__study_field_dp_dim - 0.5 \lineskip } }
               {
+                \iow_newline:
                 /Subtype ~ /Widget \iow_newline:
                 /FT ~ /Tx \iow_newline:
+                /DA ~ (/Helv ~ 8 ~ Tf ~ 0 ~ g) \iow_newline:
                 /F ~ 4 \iow_newline:
                 \bool_if:NT \l__study_field_multiline_bool
                   {

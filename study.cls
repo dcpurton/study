@@ -594,6 +594,8 @@
   % ## local variables
   \clist_new:N \l__study_radio_obj_clist
   \clist_new:N \l__study_radio_refs_clist
+  \dim_new:N \l__study_tx_dim
+  \dim_new:N \l__study_ty_dim
   \int_new:N \l__study_radio_count_int
   \tl_new:N \l__study_radio_id_tl
 
@@ -654,8 +656,22 @@
       }
     }
 
-  \cs_new_protected:Nn \__study_text_field_ap:nnn
+  \cs_new_protected:Nn \__study_text_field_ap:nnnn
     {
+      \tl_if_empty:nF { #1 }
+        {
+          \bool_set:Nn \l_tmpa_bool { #4 }
+          \dim_set:Nn \l_tmpa_dim { #3 }
+          \bool_if:NTF \l_tmpa_bool
+            {
+              \dim_set:Nn \l__study_tx_dim { 2bp }
+              \dim_set:Nn \l__study_ty_dim { \l_tmpa_dim - 11.248bp }
+            }
+            {
+              \dim_set:Nn \l__study_tx_dim { 2bp }
+              \dim_set:Nn \l__study_ty_dim { 0.5 \l_tmpa_dim - 2.96795bp }
+            }
+        }
       \pdf_object_now:nx { stream }
         {
           {
@@ -694,7 +710,8 @@
                 BT \iow_newline:
                 /Helv ~ 8 ~ Tf \iow_newline:
                 0 ~ g \iow_newline:
-                2 ~ \dim_to_decimal_in_bp:n { #3 - 8bp } ~ Td \iow_newline:
+                \dim_to_decimal_in_bp:n { \l__study_tx_dim } ~
+                  \dim_to_decimal_in_bp:n { \l__study_ty_dim } ~ Td \iow_newline:
                 ( #1 ) ~ Tj \iow_newline:
                 ET \iow_newline:
                 Q \iow_newline:
@@ -703,7 +720,7 @@
           }
         }
     }
-  \cs_generate_variant:Nn \__study_text_field_ap:nnn { xnn }
+  \cs_generate_variant:Nn \__study_text_field_ap:nnnn { xnnn }
 
   % # form set up
 
@@ -863,10 +880,11 @@
           {
             \keys_set:nn { study } { #1 }
           }
-        \__study_text_field_ap:xnn
+        \__study_text_field_ap:xnnn
           { \l__study_field_text_tl }
           { \l__study_field_wd_dim }
           { \l__study_field_ht_dim + \l__study_field_dp_dim - \lineskip }
+          { \l__study_field_multiline_bool }
         \mode_leave_vertical:
         \hbox_to_wd:nn
           { \l__study_field_wd_dim }

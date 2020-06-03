@@ -623,6 +623,7 @@
         /Type ~ /XObject \iow_newline:
         /Subtype ~ /Form \iow_newline:
         /FormType ~ 1 \iow_newline:
+        /Matrix ~ [ ~ 1 ~ 0 ~ 0 ~ 1 ~ 0 ~ 0 ~ ] \iow_newline:
         /BBox ~ [ ~ 0 ~ 0 ~ 10 ~ 10 ~ ] \iow_newline:
         /Resources ~ << ~ /ProcSet ~ [ ~ /PDF ~ ] ~ >>
       }
@@ -646,6 +647,7 @@
         /Type ~ /XObject \iow_newline:
         /Subtype ~ /Form \iow_newline:
         /FormType ~ 1 \iow_newline:
+        /Matrix ~ [ ~ 1 ~ 0 ~ 0 ~ 1 ~ 0 ~ 0 ~ ] \iow_newline:
         /BBox ~ [ ~ 0 ~ 0 ~ 10 ~ 10 ~ ] \iow_newline:
         /Resources ~ << ~ /ProcSet ~ [ ~ /PDF ~ ] ~ >>
       }

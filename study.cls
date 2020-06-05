@@ -1064,6 +1064,8 @@
 
   \ExplSyntaxOn
 
+  \cs_new_protected:Nn \__study_field_add_to_list:n { }
+
   \keys_define:nn { study }
     {
       text         .tl_set:N        = \l__study_field_text_tl,
@@ -1072,7 +1074,7 @@
       width        .value_required:n = true,
     }
 
-    \NewDocumentCommand \gap { O { } }
+  \NewDocumentCommand \gap { O { } }
       {
         \keys_set:nn { study }
           {

@@ -14,7 +14,7 @@
 % The Current Maintainer of this work is David Purton.
 %
 % This work consists of the files study.cls
-\ProvidesClass{study}[2020/06/06 Bible Study Class (DCP)]
+\ProvidesClass{study}[2020/06/10 Bible Study Class (DCP)]
 
 \RequirePackage{pdftexcmds}
 \RequirePackage{iftex}
@@ -589,14 +589,14 @@
 
   % ## global variables
   \clist_new:N \g__study_fields_clist
+  \clist_new:N \g__study_radio_refs_clist
   \int_new:N \g__study_field_id_count_int
+  \int_new:N \g__study_radio_count_int
 
   % ## local variables
   \clist_new:N \l__study_radio_obj_clist
-  \clist_new:N \l__study_radio_refs_clist
   \dim_new:N \l__study_tx_dim
   \dim_new:N \l__study_ty_dim
-  \int_new:N \l__study_radio_count_int
   \tl_new:N \l__study_radio_id_tl
 
   % # l3keys set up
@@ -809,62 +809,75 @@
       \group_end:
     }
 
-  \cs_new_protected:Nn \__study_radio_field:n
+  \cs_new_protected:Nn \__study_begin_radio_group:
     {
       \group_begin:
-        \tl_set:Nn \l__study_radio_id_tl
+        \tl_set:Nx \l__study_radio_id_tl
           { study_field_id_ \int_use:N \g__study_field_id_count_int }
-        \pdf_object_new:nn { \l__study_radio_id_tl } { dict }
+        \exp_args:NV \pdf_object_new:nn \l__study_radio_id_tl { dict }
         \dim_set:Nn \l_tmpa_dim { \box_ht:N \strutbox }
-        \clist_clear:N \l__study_radio_refs_clist
-        \int_zero:N \l__study_radio_count_int
-        \clist_set:Nn \l__study_radio_obj_clist { #1 }
-        \mode_leave_vertical:
-        \clist_map_inline:Nn \l__study_radio_obj_clist
+        \clist_gclear:N \g__study_radio_refs_clist
+        \int_gzero:N \g__study_radio_count_int
+    }
+
+  \cs_new_protected:Nn \__study_end_radio_group:
+    {
+        \exp_args:NV \pdf_object_write:nx \l__study_radio_id_tl
           {
-            \hbox_to_wd:nn
-              { \l_tmpa_dim }
-              {
-                \vrule width 0pt height 0.9 \l_tmpa_dim depth  0.1 \l_tmpa_dim
-                \__study_pdf_annotation:nnnx
-                  { \dim_use:N \l_tmpa_dim }
-                  { \dim_eval:n { 0.9 \l_tmpa_dim } }
-                  { \dim_eval:n { 0.1 \l_tmpa_dim } }
-                  {
-                    /Subtype ~ /Widget \iow_newline:
-                    /Parent ~ \pdf_object_ref:n { \l__study_radio_id_tl } \iow_newline:
-                    /FT ~ /Btn \iow_newline:
-                    /F ~ 4 \iow_newline:
-                    /AS ~ /Off \iow_newline:
-                    /AP ~ << \iow_newline:
-                      /D ~ << ~
-                        /Yes \int_use:N \l__study_radio_count_int \c_space_tl \pdf_object_ref:n { yes } ~
-                        /Off ~ \pdf_object_ref:n { off } ~ >> \iow_newline:
-                      /N ~ << ~
-                        /Yes \int_use:N \l__study_radio_count_int \c_space_tl \pdf_object_ref:n { yes } ~
-                        /Off ~ \pdf_object_ref:n { off } ~ >> \iow_newline:
-                      >>
-                  }
-                \hfill
-              }
-            \clist_put_right:Nx \l__study_radio_refs_clist
-              { \__study_pdf_annotation_last: }
-            \int_incr:N \l__study_radio_count_int
-            \c_space_tl ##1 \enskip
-          }
-        \unskip
-        \pdf_object_write:nx
-          { \l__study_radio_id_tl }
-          {
-            /Kids ~ [ ~ \clist_use:Nn \l__study_radio_refs_clist { ~ } ~ ] \iow_newline:
+            /Kids ~ [ ~ \clist_use:Nn \g__study_radio_refs_clist { ~ } ~ ] \iow_newline:
             /FT ~ /Btn \iow_newline:
             /Ff ~ 49152 \iow_newline:
             /T ~ ( \l__study_radio_id_tl ) \iow_newline:
             /V ~ /Off
           }
-        \__study_field_add_to_aux_file:x { \__study_pdf_annotation_last: }
+        \__study_field_add_to_aux_file:x { \exp_args:NV \pdf_object_ref:n \l__study_radio_id_tl }
         \int_gincr:N \g__study_field_id_count_int
       \group_end:
+    }
+
+  \cs_new_protected:Nn \__study_radio_field:
+    {
+      \mode_leave_vertical:
+      \hbox_to_wd:nn
+        { \l_tmpa_dim }
+        {
+          \vrule width 0pt height 0.9 \l_tmpa_dim depth  0.1 \l_tmpa_dim
+          \__study_pdf_annotation:nnnx
+            { \dim_use:N \l_tmpa_dim }
+            { \dim_eval:n { 0.9 \l_tmpa_dim } }
+            { \dim_eval:n { 0.1 \l_tmpa_dim } }
+            {
+              \iow_newline:
+              /Subtype ~ /Widget \iow_newline:
+              /Parent ~ \exp_args:NV \pdf_object_ref:n \l__study_radio_id_tl \iow_newline:
+              /FT ~ /Btn \iow_newline:
+              /F ~ 4 \iow_newline:
+              /AS ~ /Off \iow_newline:
+              /AP ~ << \iow_newline:
+                /D ~ << ~
+                  /Yes \int_use:N \g__study_radio_count_int \c_space_tl \pdf_object_ref:n { yes } ~
+                  /Off ~ \pdf_object_ref:n { off } ~ >> \iow_newline:
+                /N ~ << ~
+                  /Yes \int_use:N \g__study_radio_count_int \c_space_tl \pdf_object_ref:n { yes } ~
+                  /Off ~ \pdf_object_ref:n { off } ~ >> \iow_newline:
+                >>
+            }
+          \hfill
+        }
+      \clist_gput_right:Nx \g__study_radio_refs_clist
+        { \__study_pdf_annotation_last: }
+      \int_gincr:N \g__study_radio_count_int
+    }
+
+  \cs_new_protected:Nn \__study_radio_fields_with_labels:n
+    {
+      \clist_set:Nn \l__study_radio_obj_clist { #1 }
+      \clist_map_inline:Nn \l__study_radio_obj_clist
+        {
+          \__study_radio_field:
+          \c_space_tl ##1 \enskip
+        }
+      \unskip
     }
 
   \cs_new_protected:Nn \__study_text_field:n
@@ -1022,9 +1035,30 @@
         }
     }
 
+  \NewDocumentEnvironment { radiogroup } { o }
+    {
+      \__study_begin_radio_group:
+    }
+    {
+      \__study_end_radio_group:
+    }
+
+  \NewDocumentCommand \radiobutton { o }
+    {
+      \IfNoValueTF { #1 }
+        {
+          \__study_radio_field: { }
+        }
+        {
+          \__study_radio_fields_with_labels:n { #1 }
+        }
+    }
+
   \RenewDocumentCommand \truefalse { }
     {
-      \__study_radio_field:n { True, False }
+      \__study_begin_radio_group:
+      \__study_radio_fields_with_labels:n { True, False }
+      \__study_end_radio_group:
     }
 
   \RenewDocumentCommand \checkbox { o }
@@ -1072,6 +1106,25 @@
       text         .value_required:n = true,
       width        .skip_set:N        = \l__study_field_wd_skip,
       width        .value_required:n = true,
+    }
+
+  \NewDocumentEnvironment { radiogroup } { } { } { }
+
+  \NewDocumentCommand { \radiobutton } { o }
+    {
+      \IfNoValueTF { #1 }
+        {
+          \checkbox
+        }
+        {
+          \clist_set:Nn \l__study_radio_obj_clist { #1 }
+          \clist_map_inline:Nn \l__study_radio_obj_clist
+            {
+              \checkbox
+              \c_space_tl ##1 \enskip
+            }
+          \unskip
+        }
     }
 
   \NewDocumentCommand \gap { O { } }

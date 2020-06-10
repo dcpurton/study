@@ -1035,23 +1035,23 @@
         }
     }
 
-  \NewDocumentEnvironment { radiogroup } { o }
+  \NewDocumentEnvironment { radiogroup } { }
     {
       \__study_begin_radio_group:
+      \NewDocumentCommand \radiobutton { o }
+        {
+          \IfNoValueTF { ##1 }
+            {
+              \__study_radio_field: { }
+            }
+            {
+              \__study_radio_fields_with_labels:n { ##1 }
+            }
+        }
     }
     {
+      \cs_undefine:N \radiobutton
       \__study_end_radio_group:
-    }
-
-  \NewDocumentCommand \radiobutton { o }
-    {
-      \IfNoValueTF { #1 }
-        {
-          \__study_radio_field: { }
-        }
-        {
-          \__study_radio_fields_with_labels:n { #1 }
-        }
     }
 
   \RenewDocumentCommand \truefalse { }
@@ -1108,23 +1108,27 @@
       width        .value_required:n = true,
     }
 
-  \NewDocumentEnvironment { radiogroup } { } { } { }
-
-  \NewDocumentCommand { \radiobutton } { o }
+  \NewDocumentEnvironment { radiogroup } { }
     {
-      \IfNoValueTF { #1 }
+      \NewDocumentCommand { \radiobutton } { o }
         {
-          \checkbox
-        }
-        {
-          \clist_set:Nn \l__study_radio_obj_clist { #1 }
-          \clist_map_inline:Nn \l__study_radio_obj_clist
+          \IfNoValueTF { ##1 }
             {
               \checkbox
-              \c_space_tl ##1 \enskip
             }
-          \unskip
+            {
+              \clist_set:Nn \l__study_radio_obj_clist { ##1 }
+              \clist_map_inline:Nn \l__study_radio_obj_clist
+                {
+                  \checkbox
+                  \c_space_tl ####1 \enskip
+                }
+              \unskip
+            }
         }
+    }
+    {
+      \cs_undefine:N \radiobutton
     }
 
   \NewDocumentCommand \gap { O { } }

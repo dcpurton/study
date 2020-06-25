@@ -231,11 +231,12 @@
 \tcbset{greenbox/.style={enhanced jigsaw, breakable, colback=white,
   colframe=PANTONE-P-142-8-C, left=2mm, right=2mm, fonttitle=\bfseries},
   pad at break*=0mm, fontupper=\greenboxfont,
-  before upper=\setlength{\parindent}{1em}\everypar{{\setbox0\lastbox}\@minipagefalse\everypar{}}}
+  before upper=\topskip 0pt\setlength{\parindent}{1em}\everypar{{\setbox0\lastbox}\@minipagefalse\everypar{}}}
 \tcbset{yellowquote/.style={enhanced jigsaw, breakable, colback=white,
   colframe=PANTONE-P-4-16-C, boxrule=0.5mm, leftrule=10pt, sharp corners,
   segmentation style={solid, PANTONE-P-4-16-C, line width=0.5mm},
-  left=2mm, right=2mm, pad at break*=0mm, fontupper=\yellowquotefont}}
+  left=2mm, right=2mm, pad at break*=0mm, fontupper=\yellowquotefont},
+  before upper=\topskip 0pt}
 
 \newtcolorbox{greenbox}[1][]{greenbox,#1}
 \newtcolorbox{yellowquote}[1][]{yellowquote,#1}

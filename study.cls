@@ -509,6 +509,15 @@
   \end{yellowquote}
 }
 
+\newenvironment{bluebookquote}[1][]{%
+  \begin{yellowquote}[colframe=PANTONE-2975-CP]
+    \renewcommand{\formatbibleref}[1]{\emph{(#1)}}
+    \begin{biblequote}[#1]
+}{%
+    \end{biblequote}
+  \end{yellowquote}
+}
+
 \newenvironment{greenbookquote}[1][]{%
   \begin{greenbox}
     \begin{bookquote}[#1]

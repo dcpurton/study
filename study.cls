@@ -14,7 +14,7 @@
 % The Current Maintainer of this work is David Purton.
 %
 % This work consists of the files study.cls
-\ProvidesClass{study}[2020/07/09 Bible Study Class (DCP)]
+\ProvidesClass{study}[2020/07/10 Bible Study Class (DCP)]
 
 \RequirePackage{pdftexcmds}
 \RequirePackage{iftex}
@@ -428,15 +428,49 @@
     \fi
   \fi}
 
+% \obeylines improvements from https://tex.stackexchange.com/a/552967/87678
+
+% Loosely adapted from ConTeXt
+\newcommand*\obeyedline{\par}
+\newcommand*\obeylineshandler{\obeyedline}
+{\catcode`\^^M=\active % these lines must end with %
+  \protected\gdef\obeylines{\catcode`\^^M\active \let^^M\obeylineshandler}%
+  \global\let^^M\obeylineshandler} % this is in case ^^M appears in a \write
+
+% Look ahead for \end
+\newcommand\obeylineend{\futurelet\next\doobeyline}
+\newcommand\doobeyline{\ifx\next\end\else\expandafter\par\fi}
+
 \newif\ifpsalmdone
+
+\newcommand{\psalmlayout}{%
+  \raggedright
+  \leftskip\psalmleftskip
+  \parskip 0pt
+  \parindent\psalmindent}
+
+\newskip\savedleftskip
+\newskip\savedrightskip
+\newskip\savedparindent
+\let\savedrc\\
+
+\newcommand{\savelayout}{%
+  \savedleftskip\leftskip
+  \savedrightskip\rightskip
+  \savedparindent\parindent
+  \let\savedcr\\}
+
+\newcommand{\restorelayout}{%
+  \leftskip\savedleftskip
+  \rightskip\savedrightskip
+  \parindent\savedparindent
+  \let\\\savedrc}
 
 \newenvironment{psalm}
   {\par
    \global\psalmdonefalse
-   \raggedright
-   \leftskip\psalmleftskip
-   \parskip 0pt
-   \parindent\psalmindent
+   \savelayout
+   \psalmlayout
    \def\vs##1{\llap{\textsuperscript{##1}}}%
    \def\ch##1{%
      \lettrine[findent=0.5em,nindent=0em]{\hspace{-\psalmleftskip}##1}{}%
@@ -452,10 +486,12 @@
        \endgraf
      \fi
      \hangindent=3\psalmindent}
-   \obeylines
+   \let\obeyedline\obeylineend%
+   \obeylines%
   }{%
     \global\psalmdonetrue
-    \global\everypar{\global\psalmdonefalse\everypar{}}
+    \aftergroup\psalmlayout
+    \global\everypar{\restorelayout\global\psalmdonefalse\everypar{}}%
   }
 
 \newcommand*{\bibleversion}{NIVUK}
@@ -487,7 +523,7 @@
     \noindent\ignorespaces
   }{%
     \ifpsalmdone
-      \vspace{-\baselineskip}%
+      \psalmlayout
     \fi
     \biblequote@ref
   }

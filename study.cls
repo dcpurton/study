@@ -510,14 +510,15 @@
     \global\psalmdonefalse
     \parindent 1em
     \biblequotefont
+    \savelayout
     \def\biblequote@ref{#1}%
     \def\empty@biblequote@ref{}%
     \ifx\empty@biblequote@ref\biblequote@ref%
       \def\biblequote@ref{}%
     \else
       \def\biblequote@ref{%
-        {\unskip\nobreak\hfil\penalty50\hskip2em\hbox{}\nobreak
-        \hfil\formatbibleref{#1}\parfillskip=0pt \finalhyphendemerits=0
+        {\restorelayout\unskip\nobreak\hfil\penalty50\hskip2em\hbox{}\nobreak
+          \hfil\hbox{\formatbibleref{#1}}\parfillskip=0pt \finalhyphendemerits=0
             \par}}%
     \fi
     \noindent\ignorespaces

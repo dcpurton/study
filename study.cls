@@ -14,7 +14,7 @@
 % The Current Maintainer of this work is David Purton.
 %
 % This work consists of the files study.cls
-\ProvidesClass{study}[2020/07/10 Bible Study Class (DCP)]
+\ProvidesClass{study}[2020/07/11 Bible Study Class (DCP)]
 
 \RequirePackage{pdftexcmds}
 \RequirePackage{iftex}
@@ -491,7 +491,7 @@
   }{%
     \global\psalmdonetrue
     \aftergroup\psalmlayout
-    \global\everypar{\restorelayout\global\psalmdonefalse\everypar{}}%
+    \global\everypar{\aftergroup\restorelayout\global\psalmdonefalse\everypar{}}%
   }
 
 \newcommand*{\bibleversion}{NIVUK}
@@ -510,14 +510,13 @@
     \global\psalmdonefalse
     \parindent 1em
     \biblequotefont
-    \savelayout
     \def\biblequote@ref{#1}%
     \def\empty@biblequote@ref{}%
     \ifx\empty@biblequote@ref\biblequote@ref%
       \def\biblequote@ref{}%
     \else
       \def\biblequote@ref{%
-        {\restorelayout\unskip\nobreak\hfil\penalty50\hskip2em\hbox{}\nobreak
+        {\rightskip\z@\unskip\nobreak\hfil\penalty50\hskip2em\hbox{}\nobreak
           \hfil\hbox{\formatbibleref{#1}}\parfillskip=0pt \finalhyphendemerits=0
             \par}}%
     \fi

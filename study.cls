@@ -14,7 +14,7 @@
 % The Current Maintainer of this work is David Purton.
 %
 % This work consists of the files study.cls
-\ProvidesClass{study}[2020/07/11 Bible Study Class (DCP)]
+\ProvidesClass{study}[2020/07/30 Bible Study Class (DCP)]
 
 \RequirePackage{pdftexcmds}
 \RequirePackage{iftex}
@@ -296,6 +296,7 @@
     \vrule width 0pt depth \studyitemsep
   \else
     \vspace{\studyitemsep}%
+    \goodbreak%
   \fi}
 \newcommand{\multlength}[2]{%
     \glueexpr#1*#2}

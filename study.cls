@@ -370,10 +370,14 @@
 \long\def\leadernotes{\@ifstar\@leadernotes@star\@leadernotes}
 \long\def\@leadernotes#1{%
   \ifnum\useleadernotes=1%
-    \begingroup
-    \leadernotesfont\leadernotescolour
-    \ifhmode #1\else #1\par\fi
-    \endgroup
+    \ifx\\\tabularnewline
+      \tblleadernotes{#1}%
+    \else
+      \begingroup
+      \leadernotesfont\leadernotescolour
+      \ifhmode #1\else #1\par\fi
+      \endgroup
+    \fi
   \fi}
 \long\def\@leadernotes@star#1{%
   \ifnum\useleaderntoes=1%
@@ -384,8 +388,10 @@
   \fi}
 \long\def\tblleadernotes#1{%
   \ifnum\useleadernotes=1%
+    \begingroup
     \leavevmode
     \leadernotesfont\leadernotescolour#1%
+    \endgroup
   \fi}
 
 \newcommand\LORD{\textsc{Lord}}

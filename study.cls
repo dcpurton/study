@@ -14,7 +14,7 @@
 % The Current Maintainer of this work is David Purton.
 %
 % This work consists of the files study.cls
-\ProvidesClass{study}[2020/07/30 Bible Study Class (DCP)]
+\ProvidesClass{study}[2020/08/19 Bible Study Class (DCP)]
 
 \RequirePackage{pdftexcmds}
 \RequirePackage{iftex}
@@ -52,6 +52,7 @@
 
 \newif\ifbabel
 \newif\ifform
+\newif\ifdefaultlistspaces
 
 \DeclareOption{a4paper}{%
   \PassOptionsToClass{a4paper}{article}%
@@ -74,6 +75,8 @@
     \pgfpagesuselayout{repeated 2-up}[a4paper,landscape]}}
 \DeclareOption{form}{%
   \formtrue}
+\DeclareOption{defaultlistspaces}{%
+  \defaultlistspacestrue}
 \DeclareOption*{%
   \PassOptionsToClass{\CurrentOption}{article}}
 \ExecuteOptions{a4paper}
@@ -300,10 +303,15 @@
   \fi}
 \newcommand{\multlength}[2]{%
     \glueexpr#1*#2}
-\setlist[enumerate]{itemsep=\studyitemsep}
-\setlist[enumerate,1]{resume,after=\vspace{\multlength{\studyitemsep}{4/5}}}
+
+\ifdefaultlistspaces
+\else
+  \setlist[enumerate]{itemsep=\studyitemsep}
+  \setlist[enumerate,1]{resume,after=\vspace{\multlength{\studyitemsep}{4/5}}}
+  \setlist[itemize]{itemsep=0ex, leftmargin=7mm}
+\fi
 \setlist[description]{font=\normalfont\sbfseries}
-\setlist[itemize]{itemsep=0ex, leftmargin=7mm}
+
 \renewcommand\arraystretch{1.2}
 
 \newcommand*{\noitembreak}{%

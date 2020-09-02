@@ -14,7 +14,7 @@
 % The Current Maintainer of this work is David Purton.
 %
 % This work consists of the files study.cls
-\ProvidesClass{study}[2020/08/19 Bible Study Class (DCP)]
+\ProvidesClass{study}[2020/09/02 Bible Study Class (DCP)]
 
 \RequirePackage{pdftexcmds}
 \RequirePackage{iftex}
@@ -244,6 +244,8 @@
 
 \newtcolorbox{greenbox}[1][]{greenbox,#1}
 \newtcolorbox{yellowquote}[1][]{yellowquote,#1}
+\newtcolorbox{bluequote}[1][]{yellowquote, colframe=PANTONE-2975-CP,
+  fontupper=\greenboxfont, #1}
 
 \newcolumntype{L}{>{\raggedright\arraybackslash}X}
 \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
@@ -561,12 +563,11 @@
 }
 
 \newenvironment{bluebookquote}[1][]{%
-  \begin{yellowquote}[colframe=PANTONE-2975-CP]
-    \renewcommand{\formatbibleref}[1]{\emph{(#1)}}
-    \begin{biblequote}[#1]
+  \begin{bluequote}
+    \begin{bookquote}[#1]
 }{%
-    \end{biblequote}
-  \end{yellowquote}
+    \end{bookquote}
+  \end{bluequote}
 }
 
 \newenvironment{greenbookquote}[1][]{%

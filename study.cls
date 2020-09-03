@@ -594,7 +594,9 @@
   \begingroup
     \renewcommand\@makefntext[1]{%
       \parindent\footnotemargin\footnotelayout #1}%
-    \renewcommand\thefootnote{}\footnote{#1}%
+    \renewcommand\thefootnote{}%
+    \renewcommand\thempfootnote{}%
+    \footnote{#1}%
     \addtocounter{footnote}{-1}%
   \endgroup}
 

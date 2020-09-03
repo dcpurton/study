@@ -14,7 +14,7 @@
 % The Current Maintainer of this work is David Purton.
 %
 % This work consists of the files study.cls
-\ProvidesClass{study}[2020/09/02 Bible Study Class (DCP)]
+\ProvidesClass{study}[2020/09/03 Bible Study Class (DCP)]
 
 \RequirePackage{pdftexcmds}
 \RequirePackage{iftex}
@@ -191,6 +191,15 @@
   \vskip 1.5em}
 
 \urlstyle{same}
+
+\Urlmuskip 0mu plus 3mu
+\def\UrlBreaks{\do\@\do\\\do\/\do\!\do\_\do\|\do\;\do\>\do\]%
+ \do\)\do\,\do\?\do\'\do+\do\=\do\#}%
+\def\UrlSpecials{\do\.{\penalty\UrlBreakPenalty\mathchar`.}%
+  \do\_{\penalty\UrlBreakPenalty\mathchar`_}%
+  \do\-{\penalty\UrlBreakPenalty\mathchar`-}%
+  \do\ {\Url@space}\do\%{\Url@percent}\do\^^M{\Url@space}%
+  \Url@force@Tilde}
 
 \newcommand{\textelf}[1]{{\sourcesansproextreme #1}}
 \newcommand{\textlf}[1]{{\sourcesansprolight #1}}

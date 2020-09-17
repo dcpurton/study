@@ -351,12 +351,14 @@
 \def\titlemark{}
 \newpagestyle{studyheadings}[headings]{%
   \fancyhead[ce]{\nouppercase{%
-    \fancycenter{\thepage}{}{%
-      \addfontfeatures{Letters=SmallCaps,Letters=UppercaseSmallCaps}%
+    \fancycenter{\thepage~{\symbola 🗏}}{}{%
+      \normalfont
+      \addfontfeatures{Numbers=OldStyle,Letters=SmallCaps,Letters=UppercaseSmallCaps}%
       \@title}}}%
   \fancyhead[co]{\nouppercase{\fancycenter{%
-    \addfontfeatures{Letters=SmallCaps,Letters=UppercaseSmallCaps}%
-    \leftmark}{}{\thepage}}}%
+    \normalfont
+    \addfontfeatures{Numbers=OldStyle,Letters=SmallCaps,Letters=UppercaseSmallCaps}%
+    \leftmark}{}{{\symbola 🗏}~\thepage}}}%
   \def\headrulewidth{0.4pt}%
 }
 

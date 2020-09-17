@@ -14,7 +14,7 @@
 % The Current Maintainer of this work is David Purton.
 %
 % This work consists of the files study.cls
-\ProvidesClass{study}[2020/09/03 Bible Study Class (DCP)]
+\ProvidesClass{study}[2020/09/17 Bible Study Class (DCP)]
 
 \RequirePackage{pdftexcmds}
 \RequirePackage{iftex}
@@ -113,7 +113,7 @@
 \RequirePackage{calc}
 \newlength{\psize}
 \setlength{\psize}{\minof{\paperwidth}{\paperheight}}
-\RequirePackage[headsep=7mm,includehead,margin=0.07\psize,marginparsep=-65mm,marginparwidth=65mm]{geometry}
+\RequirePackage[headsep=7mm,includehead,footskip=11pt,margin=0.07\psize,marginparsep=-65mm,marginparwidth=65mm]{geometry}
 \RequirePackage[inline]{enumitem}
 \RequirePackage{graphicx}
 \RequirePackage[table,cmyk]{xcolor}

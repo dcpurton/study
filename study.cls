@@ -254,6 +254,7 @@
 \newtcolorbox{greenbox}[1][]{greenbox,#1}
 \newtcolorbox{yellowquote}[1][]{yellowquote,#1}
 \newtcolorbox{bluequote}[1][]{yellowquote, colframe=PANTONE-2975-CP,
+  segmentation style={solid, PANTONE-2975-CP, line width=0.5mm},
   fontupper=\greenboxfont, #1}
 
 \newcolumntype{L}{>{\raggedright\arraybackslash}X}

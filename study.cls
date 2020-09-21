@@ -83,9 +83,9 @@
 \ProcessOptions
 \LoadClass{article}
 
+\RequirePackage[quiet]{fontspec}
 \ifbabel
 %  \RequirePackage[nil]{babel}
-%  \RequirePackage{fontspec}
 %  \babelprovide[en-AU,main,language=Default]{australian}
 %  \defaultfontfeatures{Ligatures=TeX}
 %  \babelfont[australian]{rm}{Source Serif Pro}
@@ -355,7 +355,7 @@
 \def\titlemark{}
 \newpagestyle{studyheadings}[headings]{%
   \fancyhead[ce]{\nouppercase{%
-    \fancycenter{\thepage~{\symbola 🗏}}{}{%
+    \fancycenter{\thepage~\raisebox{-.1ex}{\symbola 🗏}}{}{%
       \normalfont
       \addfontfeatures{Numbers=OldStyle,Letters=SmallCaps,Letters=UppercaseSmallCaps}%
       \@title}}}%

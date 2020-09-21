@@ -362,7 +362,7 @@
   \fancyhead[co]{\nouppercase{\fancycenter{%
     \normalfont
     \addfontfeatures{Numbers=OldStyle,Letters=SmallCaps,Letters=UppercaseSmallCaps}%
-    \leftmark}{}{{\symbola 🗏}~\thepage}}}%
+    \leftmark}{}{\raisebox{-.1ex}{\symbola 🗏}~\thepage}}}%
   \def\headrulewidth{0.4pt}%
 }
 

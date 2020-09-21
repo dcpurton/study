@@ -119,8 +119,8 @@
 \RequirePackage[table,cmyk]{xcolor}
 \RequirePackage[normalem]{ulem}
 \RequirePackage{multicol}
-\RequirePackage{longtable}
 \RequirePackage{tabularx}
+\RequirePackage{xltabular}
 \RequirePackage{booktabs}
 \let\ifboolexpr\undefined
 \RequirePackage{tikz}
@@ -130,6 +130,9 @@
 \RequirePackage{pantone+cmykcoated,pantone+colorbridgecoated-v3}
 \RequirePackage{url}
 \RequirePackage{pgfmorepages}
+
+\setlength\LTleft\fill
+\setlength\LTright{0pt}
 
 \pgfmorepagesloadextralayouts
 \setstudypagelayout

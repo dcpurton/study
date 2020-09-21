@@ -245,7 +245,9 @@
 
 \tcbset{greenbox/.style={enhanced jigsaw, breakable, colback=white,
   colframe=PANTONE-P-142-8-C, left=2mm, right=2mm, fonttitle=\bfseries,
-  pad at break*=0mm, fontupper=\greenboxfont,
+  pad at break*=0mm, fontupper=\greenboxfont, fontlower=\greenboxfont,
+  segmentation style={solid, PANTONE-P-142-8-C, line width=0.5mm},
+  before lower=\noindent,
   before upper=\topskip 0pt\parindent
   1em\everypar{{\setbox0\lastbox}\@minipagefalse\everypar{}}}}
 \tcbset{yellowquote/.style={enhanced jigsaw, breakable, colback=white,

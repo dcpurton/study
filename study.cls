@@ -14,7 +14,7 @@
 % The Current Maintainer of this work is David Purton.
 %
 % This work consists of the files study.cls
-\ProvidesClass{study}[2020/09/17 Bible Study Class (DCP)]
+\ProvidesClass{study}[2020/09/22 Bible Study Class (DCP)]
 
 \RequirePackage{pdftexcmds}
 \RequirePackage{iftex}
@@ -130,9 +130,13 @@
 \RequirePackage{pantone+cmykcoated,pantone+colorbridgecoated-v3}
 \RequirePackage{url}
 \RequirePackage{pgfmorepages}
+\RequirePackage{parskip}
 
 \setlength\LTleft\fill
 \setlength\LTright{0pt}
+
+\setlength{\abovetopsep}{\smallskipamount}
+\setlength{\belowbottomsep}{\smallskipamount}
 
 \pgfmorepagesloadextralayouts
 \setstudypagelayout

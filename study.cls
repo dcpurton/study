@@ -14,7 +14,7 @@
 % The Current Maintainer of this work is David Purton.
 %
 % This work consists of the files study.cls
-\ProvidesClass{study}[2020/09/22 Bible Study Class (DCP)]
+\ProvidesClass{study}[2020/09/24 Bible Study Class (DCP)]
 
 \RequirePackage{pdftexcmds}
 \RequirePackage{iftex}
@@ -134,6 +134,8 @@
 
 \setlength\LTleft\fill
 \setlength\LTright{0pt}
+\setlength{\LTpre}{\smallskipamount}
+\setlength{\LTpost}{\smallskipamount}
 
 \setlength{\abovetopsep}{\smallskipamount}
 \setlength{\belowbottomsep}{\smallskipamount}

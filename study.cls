@@ -14,7 +14,7 @@
 % The Current Maintainer of this work is David Purton.
 %
 % This work consists of the files study.cls
-\ProvidesClass{study}[2020/09/24 Bible Study Class (DCP)]
+\ProvidesClass{study}[2020/11/23 Bible Study Class (DCP)]
 
 \RequirePackage{pdftexcmds}
 \RequirePackage{iftex}
@@ -360,16 +360,18 @@
   \fancyhead[LE]{\@header{\textbf{\@passage}}{\emph{\@title}}{\@study}}%
 }
 
+\newcommand\ctoscshape{\addfontfeatures{Numbers=ProportionalOff,Letters=SmallCaps,Letters=UppercaseSmallCaps}}
+\newcommand\textctosc[1]{\begingroup\ctoscshape#1\endgroup}
+\newcommand\cpsp{\addfontfeature{LetterSpace=2.0}}
+\newcommand\textcpsp[1]{\begingroup\cpsp#1\endgroup}
+
 \def\titlemark{}
 \newpagestyle{studyheadings}[headings]{%
   \fancyhead[ce]{\nouppercase{%
     \fancycenter{\thepage~\raisebox{-.1ex}{\symbola 🗏}}{}{%
-      \normalfont
-      \addfontfeatures{Numbers=OldStyle,Letters=SmallCaps,Letters=UppercaseSmallCaps}%
-      \@title}}}%
+      \normalfont\ctoscshape\@title}}}%
   \fancyhead[co]{\nouppercase{\fancycenter{%
-    \normalfont
-    \addfontfeatures{Numbers=OldStyle,Letters=SmallCaps,Letters=UppercaseSmallCaps}%
+    \normalfont\ctoscshape
     \leftmark}{}{\raisebox{-.1ex}{\symbola 🗏}~\thepage}}}%
   \def\headrulewidth{0.4pt}%
 }
@@ -618,6 +620,12 @@
   ItalicFont=Symbola,
   BoldFont=Symbola,
   BoldItalicFont=Symbola]
+
+\newfontfamily\emoji{Noto Color Emoji}[
+  ItalicFont=Noto Color Emoji,
+  BoldFont=Noto Color Emoji,
+  BoldItalicFont=Noto Color Emoji,
+  Renderer=Harfbuzz]
 
 \tikzset{
   -|-/.style={

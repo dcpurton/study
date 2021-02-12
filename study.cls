@@ -85,22 +85,30 @@
 
 \RequirePackage[quiet]{fontspec}
 \ifbabel
-%  \RequirePackage[nil]{babel}
-%  \babelprovide[en-AU,main,language=Default]{australian}
-%  \defaultfontfeatures{Ligatures=TeX}
-%  \babelfont[australian]{rm}{Source Serif Pro}
-%  \babelfont[australian]{sf}{Source Sans Pro}
-%  \babelfont[australian]{sourcesansproextreme}[%
-%    %BoldFont = Source Sans Pro Black,
-%    %BoldItalicFont = Source Sans Pro Black Italic
-%  ]{Source Sans Pro Extra Light}
-%  \babelfont[australian]{sourcesansproextreme}[%
-%    %BoldFont = Source Sans Pro Semibold,
-%    %BoldItalicFont = Source Sans Pro Semibold Italic
-%  ]{Source Sans Pro Light}
-%  \renewcommand\familydefault{\sfdefault}
-%  \def\sourcesansproextreme\sourcesansproextremefamily
-%  \def\sourcesansprolight\sourcesansprolightfamily
+  \RequirePackage[nil]{babel}
+  \babelprovide[en-AU,main,language=Default]{australian}
+  \defaultfontfeatures{Ligatures=TeX}
+  \babelfont{rm}[%
+      Numbers = Proportional
+   ]{Source Serif Pro}
+  \babelfont{sf}[%
+      Numbers = Proportional
+    ]{Source Sans Pro}
+  \babelfont{tt}[%
+    ]{Source Code Pro}
+  \babelfont{sourcesansproextreme}[%
+      Numbers = Proportional,
+      BoldFont = Source Sans Pro Black,
+      BoldItalicFont = Source Sans Pro Black Italic
+    ]{Source Sans Pro Extra Light}
+  \babelfont{sourcesansprolight}[%
+      Numbers = Proportional,
+      BoldFont = Source Sans Pro Semibold,
+      BoldItalicFont = Source Sans Pro Semibold Italic
+    ]{Source Sans Pro Light}
+  \renewcommand\familydefault{\sfdefault}
+  \def\sourcesansproextreme{\sourcesansproextremefamily}
+  \def\sourcesansprolight{\sourcesansprolightfamily}
 \else
   \RequirePackage[proportional,default]{sourcesanspro}
 \fi

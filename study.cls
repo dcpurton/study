@@ -435,7 +435,7 @@
     \fi
   \fi}
 \long\def\@leadernotes@star#1{%
-  \ifnum\useleaderntoes=1%
+  \ifnum\useleadernotes=1%
     \blap{%
       \begingroup
       \leadernotesfont\leadernotescolour#1%

@@ -294,25 +294,37 @@
 
 \newcommand{\tighter}{%
   \ifform
-    \setlength{\studyitemsep}{24mm}
+    \setlength{\studyitemsep}{24mm}%
     \let\skipanswerspace\skipnexttextfield
     \let\skipafterenumspace\skipnexttextfield
   \else
-    \setlength{\studyitemsep}{8mm plus 5mm minus 2mm}
-    \renewcommand{\skipanswerspace}{\vspace{\multlength{\studyitemsep}{-1}}}
-    \renewcommand{\skipafterenumspace}{\vspace{\multlength{\studyitemsep}{-4/5}}}
+    \setlength{\studyitemsep}{8mm plus 5mm minus 2mm}%
+    \renewcommand{\skipanswerspace}{\vspace{\multlength{\studyitemsep}{-1}}}%
+    \renewcommand{\skipafterenumspace}{\vspace{\multlength{\studyitemsep}{-4/5}}}%
   \fi
 }
 
 \newcommand{\looser}{%
   \ifform
-    \setlength{\studyitemsep}{36mm}
+    \setlength{\studyitemsep}{36mm}%
     \let\skipanswerspace\skipnexttextfield
     \let\skipafterenumspace\skipnexttextfield
   \else
-    \setlength{\studyitemsep}{12mm plus 5mm minus 2mm}
-    \renewcommand{\skipanswerspace}{\vspace{\multlength{\studyitemsep}{-1}}}
-    \renewcommand{\skipafterenumspace}{\vspace{\multlength{\studyitemsep}{-4/5}}}
+    \setlength{\studyitemsep}{12mm plus 5mm minus 2mm}%
+    \renewcommand{\skipanswerspace}{\vspace{\multlength{\studyitemsep}{-1}}}%
+    \renewcommand{\skipafterenumspace}{\vspace{\multlength{\studyitemsep}{-4/5}}}%
+  \fi
+}
+
+\newcommand{\normalanswerspacing}{%
+  \ifform
+    \setlength{\studyitemsep}{30mm}%
+    \let\skipanswerspace\skipnexttextfield
+    \let\skipafterenumspace\skipnexttextfield
+  \else
+    \setlength{\studyitemsep}{10mm plus 5mm minus 2mm}%
+  \renewcommand{\skipanswerspace}{\vspace{\multlength{\studyitemsep}{-1}}}%
+  \renewcommand{\skipafterenumspace}{\vspace{\multlength{\studyitemsep}{-4/5}}}%
   \fi
 }
 

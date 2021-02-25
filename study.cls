@@ -14,7 +14,7 @@
 % The Current Maintainer of this work is David Purton.
 %
 % This work consists of the files study.cls
-\ProvidesClass{study}[2021/02/05 Bible Study Class (DCP)]
+\ProvidesClass{study}[2021/02/25 Bible Study Class (DCP)]
 
 \RequirePackage{pdftexcmds}
 \RequirePackage{iftex}
@@ -517,10 +517,10 @@
 \let\savedrc\\
 
 \newcommand{\savelayout}{%
-  \savedleftskip\leftskip
-  \savedrightskip\rightskip
-  \savedparindent\parindent
-  \let\savedcr\\}
+  \global\savedleftskip\leftskip
+  \global\savedrightskip\rightskip
+  \global\savedparindent\parindent
+  \global\let\savedcr\\}
 
 \newcommand{\restorelayout}{%
   \leftskip\savedleftskip
@@ -553,7 +553,7 @@
   }{%
     \global\psalmdonetrue
     \aftergroup\psalmlayout
-    \global\everypar{\aftergroup\restorelayout\global\psalmdonefalse\everypar{}}%
+    \global\everypar{\aftergroup\restorelayout\global\psalmdonefalse\global\everypar{}}%
   }
 
 \newcommand*{\bibleversion}{NIVUK}

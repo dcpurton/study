@@ -1,5 +1,5 @@
 %% study.cls
-%% Copyright 2017-2020 David Purton
+%% Copyright 2017-2021 David Purton
 %
 % This work may be distributed and/or modified under the
 % conditions of the LaTeX Project Public License, either version 1.3
@@ -14,7 +14,7 @@
 % The Current Maintainer of this work is David Purton.
 %
 % This work consists of the files study.cls
-\ProvidesClass{study}[2021/02/25 Bible Study Class (DCP)]
+\ProvidesClass{study}[2021/09/17 Bible Study Class (DCP)]
 
 \RequirePackage{pdftexcmds}
 \RequirePackage{iftex}
@@ -84,10 +84,21 @@
 \LoadClass{article}
 
 \RequirePackage[quiet]{fontspec}
+\directlua {
+  fonts.handlers.otf.addfeature {
+    name = "quotekern",
+    type = "kern",
+    data = {
+      ["‘"] = { ["“"] =  50 },
+      ["”"] = { ["’"] =  50 },
+    },
+  }
+}
+\defaultfontfeatures{Ligatures=TeX,RawFeature=+quotekern}
 \ifbabel
   \RequirePackage[nil]{babel}
   \babelprovide[en-AU,main,language=Default]{australian}
-  \defaultfontfeatures{Ligatures=TeX}
+  \babelprovide[import, language=Chinese Simplified]{chinese-simplified}
   \babelfont{rm}[%
       Numbers = Proportional
    ]{Source Serif Pro}
@@ -106,9 +117,28 @@
       BoldFont = Source Sans Pro Semibold,
       BoldItalicFont = Source Sans Pro Semibold Italic
     ]{Source Sans Pro Light}
+  \babelfont[chinese-simplified]{rm}[%
+      ItalicFont = Noto Serif CJK SC Light,
+      BoldFont = Noto serif CJK SC SemiBold,
+      BoldItalicFont = Noto Serif CJK SC SemiBold,
+      UprightFeatures = {SmallCapsFont = {Noto Serif CJK SC Light}},
+      ItalicFeatures = {SmallCapsFont = {Noto Serif CJK SC Light}},
+      BoldFeatures = {SmallCapsFont = {Noto Serif CJK SC SemiBold}},
+      BoldItalicFeatures = {SmallCapsFont = {Noto Serif CJK SC SemiBold}}
+    ]{Noto Serif CJK SC Light}
+  \babelfont[chinese-simplified]{sf}[%
+      ItalicFont = Noto Sans CJK SC DemiLight,
+      BoldFont = Noto Sans CJK SC Medium,
+      BoldItalicFont = Noto Sans CJK SC Medium,
+      UprightFeatures = {SmallCapsFont = {Noto Sans CJK SC DemiLight}},
+      ItalicFeatures = {SmallCapsFont = {Noto Sans CJK SC DemiLight}},
+      BoldFeatures = {SmallCapsFont = {Noto Sans CJK SC Medium}},
+      BoldItalicFeatures = {SmallCapsFont = {Noto Sans CJK SC Medium}}
+    ]{Noto Sans CJK SC DemiLight}
   \renewcommand\familydefault{\sfdefault}
   \def\sourcesansproextreme{\sourcesansproextremefamily}
   \def\sourcesansprolight{\sourcesansprolightfamily}
+  \babelcharproperty{`“}{linebreak}{op}
 \else
   \RequirePackage[proportional,default]{sourcesanspro}
 \fi
@@ -139,6 +169,7 @@
 \RequirePackage{url}
 \RequirePackage{pgfmorepages}
 \RequirePackage{parskip}
+\RequirePackage{setspace}
 
 \setlength\LTleft\fill
 \setlength\LTright{0pt}
@@ -468,10 +499,11 @@
 
 \renewcommand*{\LettrineSecondString}{X}
 \newcommand*{\ch}[1]{\lettrine[findent=0.5em,nindent=0em]{#1}{}}
-\let\vs\textsuperscript
-\newcommand*{\vslap}[1]{%
-  \strut\llap{\textsuperscript{#1}}%
-}
+\@ifpackageloaded{babel}
+  {\newcommand*{\babeltextsuperscript}[1]{\foreignlanguage{australian}{\textsuperscript{#1}}\nobreak}}
+  {\newcommand*{\babeltextsuperscript}[1]{\textsuperscript{#1}}}
+\newcommand*{\vs}[1]{\babeltextsuperscript{#1}}
+\newcommand*{\vslap}[1]{\strut\llap{\babeltextsuperscript{#1}}}
 \newcommand*{\biblequotefont}{\footnotesize}
 \newlength\psalmleftskip
 \setlength\psalmleftskip{1em}
@@ -533,7 +565,7 @@
    \global\psalmdonefalse
    \savelayout
    \psalmlayout
-   \def\vs##1{\llap{\textsuperscript{##1}}}%
+   \def\vs##1{\llap{\babeltextsuperscript{##1}}}%
    \def\ch##1{%
      \lettrine[findent=0.5em,nindent=0em]{\hspace{-\psalmleftskip}##1}{}%
      \setlength{\psalmchapindentlength}{\LettrineWidth}%

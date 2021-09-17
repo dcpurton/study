@@ -208,6 +208,10 @@
 \pgfmorepagesloadextralayouts
 \setstudypagelayout
 
+\long\def\@coverimage{}
+\newcommand{\coverimage}[1]{%
+  \long\def\@coverimage{#1}}
+
 \long\def\maketitle{%
   \par
   \begingroup
@@ -230,24 +234,36 @@
   \endgroup
   \setcounter{footnote}{0}}
 
+\newif\ifusetitle
+\newif\ifusecoverimage
 \newif\ifuseauthor
 \newif\ifusedate
 \newif\ifusefocuslogo
+\newif\ifusenamespace
 
 \usedatetrue
+\usetitletrue
 \usefocuslogotrue
 
 \def\@maketitle{%
   \newpage
   \null
-  \vskip 2em
+  \ifusecoverimage
+  \else
+    \vskip 2em
+  \fi
   \begin{center}
     \let\footnote\thanks
     \ifusefocuslogo
-      \includegraphics[height=2cm]{focus_adelaide_full_afesblue_cmyk.pdf}%
-      \vskip 1.5em
+      \hfill\includegraphics[width=8cm]{focus_adelaide_full_afesblue_cmyk}
+      \vskip 1cm
     \fi
-    {\LARGE\@title\par}%
+    \ifusetitle
+      {\LARGE\@title\par}%
+    \fi
+    \ifusecoverimage
+      \@coverimage
+    \fi
     \ifuseauthor
       \vskip 1.5em
       {\large\lineskip .5em
@@ -262,7 +278,36 @@
     \fi
   \end{center}%
   \par
-  \vskip 1.5em}
+  \ifusenamespace
+    \vfill
+    {\Huge Name: \gap[width=7cm]}%
+  \else
+    \vskip 1.5em
+  \fi
+  \if@titlepage
+    \thispagestyle{empty}%
+    \clearpage
+  \fi}
+
+\newcommand{\imprintpage}{%
+  \thispagestyle{empty}
+  \begingroup
+  \small
+  \vspace*{3cm}
+  \@title
+
+  © \the\year{} FOCUS Adelaide
+
+  \bigskip
+
+  Scripture taken from The Holy Bible, New International Version® (Anglicised),
+  NIV® . Copyright ©~1979, 1984, 2011 Biblica, Inc. Used by permission of Hodder
+  \& Stoughton Limited, a division of Hachette UK. All rights reserved
+  worldwide. ‘New International Version’ and ‘NIV’ are registered trademarks of
+  Biblica, Inc. Used by permission.
+  \endgroup
+
+  \clearpage}
 
 \urlstyle{same}
 

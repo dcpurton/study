@@ -53,15 +53,31 @@
 \newif\ifbabel
 \newif\ifform
 \newif\ifdefaultlistspaces
+\newif\ifbookclass
 
+\DeclareOption{book}{%
+  \bookclasstrue
+  \PassOptionsToClass{openany}{book}}
 \DeclareOption{a4paper}{%
-  \PassOptionsToClass{a4paper}{article}%
+  \ifbookclass
+    \PassOptionsToClass{a4paper}{book}%
+  \else
+    \PassOptionsToClass{a4paper}{article}%
+  \fi
   \PassOptionsToPackage{a4paper}{geometry}}
 \DeclareOption{letterpaper}{%
-  \PassOptionsToClass{letterpaper}{article}%
+  \ifbookclass
+    \PassOptionsToClass{letterpaper}{book}%
+  \else
+    \PassOptionsToClass{letterpaper}{article}%
+  \fi
   \PassOptionsToPackage{letterpaper}{geometry}}
 \DeclareOption{a5paper}{%
-  \PassOptionsToClass{a5paper}{article}%
+  \ifbookclass
+    \PassOptionsToClass{a5paper}{book}%
+  \else
+    \PassOptionsToClass{a5paper}{article}%
+  \fi
   \PassOptionsToPackage{a5paper}{geometry}}
 \DeclareOption{babel}{%
   \babeltrue
@@ -78,10 +94,18 @@
 \DeclareOption{defaultlistspaces}{%
   \defaultlistspacestrue}
 \DeclareOption*{%
-  \PassOptionsToClass{\CurrentOption}{article}}
+  \ifbookclass
+    \PassOptionsToClass{\CurrentOption}{book}%
+  \else
+    \PassOptionsToClass{\CurrentOption}{article}%
+  \fi}
 \ExecuteOptions{a4paper}
 \ProcessOptions
-\LoadClass{article}
+\ifbookclass
+  \LoadClass{book}
+\else
+  \LoadClass{article}
+\fi
 
 \RequirePackage[quiet]{fontspec}
 \directlua {
@@ -143,10 +167,11 @@
   \RequirePackage[proportional,default]{sourcesanspro}
 \fi
 
+\RequirePackage{xpatch}
 \RequirePackage{realscripts}
 \RequirePackage{microtype}
 \RequirePackage{lettrine}
-\RequirePackage[plain,headings]{nccfancyhdr}
+\RequirePackage[headings]{nccfancyhdr}
 \RequirePackage{footmisc}
 \RequirePackage{calc}
 \newlength{\psize}
@@ -170,6 +195,7 @@
 \RequirePackage{pgfmorepages}
 \RequirePackage{parskip}
 \RequirePackage{setspace}
+\RequirePackage{titlesec}
 
 \setlength\LTleft\fill
 \setlength\LTright{0pt}
@@ -425,9 +451,16 @@
     \normalfont\ctoscshape
     \leftmark}{}{\raisebox{-.1ex}{\symbola 🗏}~\thepage}}}%
   \def\headrulewidth{0.4pt}%
+  \def\chaptermark##1{%
+    \markboth{\MakeUppercase{##1}}{}}%
 }
 
-\pagestyle{study}
+\ifbookclass
+  \assignpagestyle{\chapter}{studyheadings}
+  \pagestyle{studyheadings}
+\else
+  \pagestyle{study}
+\fi
 
 \newcommand*{\leadernotescolour}{\color{black!40}}
 \newcommand{\leadernotesfont}{}
@@ -496,6 +529,19 @@
   {-2.25ex\@plus -1ex \@minus -.2ex}%
   {1ex \@plus .2ex}%
   {\flushleft\normalfont\normalsize\sourcesansprolight\bfseries}}
+
+\ifbookclass
+  \titleformat{\chapter}{\normalfont\Large\bfseries}{}{0pt}{}
+  \titlespacing*{\chapter}{0pt}{-25pt}{.75ex plus .2ex}
+  \renewcommand*{\thesection}{\arabic{section}}
+  \xpatchcmd{\@chapter}
+    {\addcontentsline{toc}{chapter}{\protect\numberline{\thechapter}#1}}
+    {\addcontentsline{toc}{chapter}{#1}}
+    {}
+    {}
+\fi
+
+\setcounter{tocdepth}{1}
 
 \renewcommand*{\LettrineSecondString}{X}
 \newcommand*{\ch}[1]{\lettrine[findent=0.5em,nindent=0em]{#1}{}}

@@ -185,7 +185,6 @@
 \RequirePackage{tabularx}
 \RequirePackage{xltabular}
 \RequirePackage{booktabs}
-\let\ifboolexpr\undefined
 \RequirePackage{tikz}
 \usetikzlibrary{positioning,chains,calc,arrows,matrix,intersections,
   decorations.text,backgrounds}
@@ -797,7 +796,7 @@
 
   % Begin PDF form code
 
-  \RequirePackage{l3pdf}
+  %\RequirePackage{l3pdf}
 
   \ExplSyntaxOn
 
@@ -913,7 +912,7 @@
               \dim_set:Nn \l__study_ty_dim { 0.5 \l_tmpa_dim - 2.96795bp }
             }
         }
-      \pdf_object_now:nx { stream }
+      \pdf_object_unnamed_write:nx { stream }
         {
           {
             /Type ~ /XObject \iow_newline:
@@ -1164,7 +1163,7 @@
                     /V ~ ( \l__study_field_text_tl ) \iow_newline:
                   }
                 /MK ~ << ~ /BG ~ [ ~ 0.02 ~ 0.14 ~ 0 ~ 0 ~ ] ~ >> \iow_newline:
-                /AP ~ << ~ /N ~  \pdf_object_last: \c_space_tl >>
+                /AP ~ << ~ /N ~  \pdf_object_ref_last: \c_space_tl >>
               }
             \hfill
           }

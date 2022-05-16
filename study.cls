@@ -596,6 +596,10 @@
   {-2.25ex\@plus -1ex \@minus -.2ex}%
   {1ex \@plus .2ex}%
   {\flushleft\normalfont\normalsize\sourcesansprolight\bfseries}}
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+  {-2ex\@plus -0.8ex \@minus -.1ex}%
+  {0.8ex \@plus .1ex}%
+  {\flushleft\normalfont\normalsize\itshape}}
 
 \ifbookclass
   \titleformat{\chapter}{\normalfont\Large\bfseries}{}{0pt}{}

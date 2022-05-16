@@ -194,7 +194,7 @@
 \RequirePackage{booktabs}
 \RequirePackage{tikz}
 \usetikzlibrary{positioning,chains,calc,arrows,matrix,intersections,
-  decorations.text,backgrounds}
+  decorations.text,backgrounds,tikzmark}
 \RequirePackage[breakable,skins]{tcolorbox}
 \RequirePackage{pantone+cmykcoated,pantone+colorbridgecoated-v3}
 \RequirePackage{url}
@@ -261,7 +261,15 @@
   \begin{center}
     \let\footnote\thanks
     \ifusefocuslogo
-      \hfill\includegraphics[width=8cm]{focus_adelaide_full_afesblue_cmyk}
+      \hfill\includegraphics[width=8cm]{focus_adelaide_full_afesblue_cmyk}%
+      \ifusecoverimage
+        \long\def\@empty@coverimage{}%
+        \ifx\@coverimage\@empty@coverimage
+          \hfill
+        \fi
+      \else
+        \hfill\strut
+      \fi
       \vskip 1cm
     \fi
     \ifusetitle
@@ -288,7 +296,7 @@
     \vfill
     {\Huge Name: \gap[width=7cm]}%
   \else
-    \vskip 1.5em
+    \vspace*{1cm}
   \fi
   \if@titlepage
     \thispagestyle{empty}%
@@ -361,6 +369,13 @@
 \newcommand{\firsttimer}{\timer{0.4}{0}{60}}
 \newcommand{\secondtimer}{\timer{0.4}{60}{270}}
 \newcommand{\thirdtimer}{\timer{0.4}{270}{360}}
+
+\newcommand*{\tikzpicoverlay}[2][]{%
+  \nointerlineskip\vbox to 0pt{%
+    \begin{tikzpicture}[remember picture, overlay,
+        inner sep=0pt, outer sep=0pt,#1]
+      #2%
+    \end{tikzpicture}}}
 
 \newcommand*{\yellowquotefont}{\footnotesize}
 \newcommand*{\greenboxfont}{\small}

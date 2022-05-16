@@ -384,14 +384,16 @@
   colframe=PANTONE-P-142-8-C, left=2mm, right=2mm, fonttitle=\bfseries,
   pad at break*=0mm, fontupper=\greenboxfont, fontlower=\greenboxfont,
   segmentation style={solid, tcbcolframe, line width=0.5mm},
-  before lower=\noindent,
+  sidebyside align=top, before lower=\noindent, sidebyside gap=6.5mm,
   before upper=\topskip 0pt\parindent
   1em\everypar{{\setbox0\lastbox}\@minipagefalse\everypar{}}}}
 \tcbset{yellowquote/.style={enhanced jigsaw, breakable, colback=white,
   colframe=PANTONE-P-4-16-C, boxrule=0.5mm, leftrule=10pt, sharp corners,
   segmentation style={solid, tcbcolframe, line width=0.5mm},
   left=2mm, right=2mm, pad at break*=0mm, fontupper=\yellowquotefont,
-  before upper=\topskip 0pt}}
+  fontlower=\yellowquotefont,
+  before upper=\topskip 0pt, sidebyside align=top seam, sidebyside gap=6.5mm,
+  hyphenationfix}}
 
 \newtcolorbox{greenbox}[1][]{greenbox,#1}
 \newtcolorbox{yellowquote}[1][]{yellowquote,#1}

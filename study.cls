@@ -121,8 +121,8 @@
 \defaultfontfeatures{Ligatures=TeX,RawFeature=+quotekern}
 \ifbabel
   \RequirePackage[nil]{babel}
-  \babelprovide[en-AU,main,language=Default]{australian}
-  \babelprovide[import, language=Chinese Simplified]{chinese-simplified}
+  \babelprovide[import,main,language=Default,hyphenrules=ukenglish]{australian}
+  \babelprovide[import,language=Chinese Simplified]{chinese-simplified}
   \babelfont{rm}[%
       Numbers = Proportional
    ]{Source Serif Pro}

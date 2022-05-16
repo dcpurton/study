@@ -89,6 +89,12 @@
 \DeclareOption{repeated2up}{%
   \def\setstudypagelayout{%
     \pgfpagesuselayout{repeated 2-up}[a4paper,landscape]}}
+\DeclareOption{booklet4}{%
+  \def\setstudypagelayout{%
+    \pgfpagesuselayout{4 on 2, book format}[a4paper,landscape]}}
+\DeclareOption{booklet8}{%
+  \def\setstudypagelayout{%
+    \pgfpagesuselayout{8 on 4, book format}[a4paper,landscape]}}
 \DeclareOption{form}{%
   \formtrue}
 \DeclareOption{defaultlistspaces}{%

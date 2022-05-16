@@ -180,6 +180,7 @@
 \RequirePackage[inline]{enumitem}
 \RequirePackage{graphicx}
 \RequirePackage[table,cmyk]{xcolor}
+\RequirePackage{luacolor}
 \RequirePackage[normalem]{ulem}
 \RequirePackage{multicol}
 \RequirePackage{tabularx}

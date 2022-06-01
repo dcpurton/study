@@ -14,7 +14,7 @@
 % The Current Maintainer of this work is David Purton.
 %
 % This work consists of the files study.cls
-\ProvidesClass{study}[2022/05/16 Bible Study Class (DCP)]
+\ProvidesClass{study}[2022/06/01 Bible Study Class (DCP)]
 
 \RequirePackage{pdftexcmds}
 \RequirePackage{iftex}
@@ -615,10 +615,12 @@
 \setcounter{tocdepth}{1}
 
 \renewcommand*{\LettrineSecondString}{X}
-\newcommand*{\ch}[1]{\lettrine[findent=0.5em,nindent=0em]{#1}{}}
 \@ifpackageloaded{babel}
-  {\newcommand*{\babeltextsuperscript}[1]{\foreignlanguage{australian}{\textsuperscript{#1}}\nobreak}}
-  {\newcommand*{\babeltextsuperscript}[1]{\textsuperscript{#1}}}
+  {\newcommand*{\babeltextsuperscript}[1]{\foreignlanguage{australian}{\textsuperscript{#1}}\nobreak}%
+   \newcommand*{\babelchapter}[1]{\lettrine[findent=0.5em,nindent=0em]{\foreignlanguage{australian}{#1}}{}}}
+  {\newcommand*{\babeltextsuperscript}[1]{\textsuperscript{#1}}%
+   \newcommand*{\babelchapter}[1]{\lettrine[findent=0.5em,nindent=0em]{#1}{}}}
+\newcommand*{\ch}[1]{\babelchapter{#1}}
 \newcommand*{\vs}[1]{\babeltextsuperscript{#1}}
 \newcommand*{\vslap}[1]{\strut\llap{\babeltextsuperscript{#1}}}
 \newcommand*{\biblequotefont}{\footnotesize}

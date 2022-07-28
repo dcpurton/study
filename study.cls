@@ -215,6 +215,7 @@
 \RequirePackage{parskip}
 \RequirePackage{setspace}
 \RequirePackage{titlesec}
+\RequirePackage{scripture}
 
 \setlength\LTleft\fill
 \setlength\LTright{0pt}
@@ -627,164 +628,59 @@
 
 \setcounter{tocdepth}{1}
 
-\renewcommand*{\LettrineSecondString}{X}
+% scripture quotation set up
+
+\scripturesetup{%
+  chapter/font=,
+  font=\footnotesize,
+  parindent=1em,
+  parskip=0pt plus 1pt,
+  noindent,
+  reference/font=\sbfseries,
+  version=NIVUK
+}
 \@ifpackageloaded{babel}
-  {\newcommand*{\babeltextsuperscript}[1]{\foreignlanguage{australian}{\textsuperscript{#1}}\nobreak}%
-   \newcommand*{\babelchapter}[1]{\lettrine[findent=0.5em,nindent=0em]{\foreignlanguage{australian}{#1}}{}}}
-  {\newcommand*{\babeltextsuperscript}[1]{\textsuperscript{#1}}%
-   \newcommand*{\babelchapter}[1]{\lettrine[findent=0.5em,nindent=0em]{#1}{}}}
-\newcommand*{\ch}[1]{\babelchapter{#1}}
-\newcommand*{\vs}[1]{\babeltextsuperscript{#1}}
-\newcommand*{\vslap}[1]{\strut\llap{\babeltextsuperscript{#1}}}
-\newcommand*{\biblequotefont}{\footnotesize}
-\newlength\psalmleftskip
-\setlength\psalmleftskip{1em}
-\newlength\psalmindent
-\setlength{\psalmindent}{1em}
-\newlength{\psalmchapindentlength}
-\def\psalmchapindent{%
-  \ifx\vs\vslap
-    \hspace*{\psalmchapindentlength}%
-  \else
-    \hspace*{-\psalmindent}%
-    \ifdim\psalmindent<\psalmchapindentlength
-      \hspace*{\psalmchapindentlength}%
-     \else
-       \hspace*{\psalmindent}%
-    \fi
-  \fi}
-
-% \obeylines improvements from https://tex.stackexchange.com/a/552967/87678
-
-% Loosely adapted from ConTeXt
-\newcommand*\obeyedline{\par}
-\newcommand*\obeylineshandler{\obeyedline}
-{\catcode`\^^M=\active % these lines must end with %
-  \protected\gdef\obeylines{\catcode`\^^M\active \let^^M\obeylineshandler}%
-  \global\let^^M\obeylineshandler} % this is in case ^^M appears in a \write
-
-% Look ahead for \end
-\newcommand\obeylineend{\futurelet\next\doobeyline}
-\newcommand\doobeyline{\ifx\next\end\else\expandafter\par\fi}
-
-\newif\ifpsalmdone
-
-\newcommand{\psalmlayout}{%
-  \raggedright
-  \leftskip\psalmleftskip
-  \parskip 0pt
-  \parindent\psalmindent}
-
-\newskip\savedleftskip
-\newskip\savedrightskip
-\newskip\savedparindent
-\let\savedrc\\
-
-\newcommand{\savelayout}{%
-  \global\savedleftskip\leftskip
-  \global\savedrightskip\rightskip
-  \global\savedparindent\parindent
-  \global\let\savedcr\\}
-
-\newcommand{\restorelayout}{%
-  \leftskip\savedleftskip
-  \rightskip\savedrightskip
-  \parindent\savedparindent
-  \let\\\savedrc}
-
-\newenvironment{psalm}
-  {\par
-   \global\psalmdonefalse
-   \savelayout
-   \psalmlayout
-   \def\vs##1{\llap{\babeltextsuperscript{##1}}}%
-   \def\ch##1{%
-     \lettrine[findent=0.5em,nindent=0em]{\hspace{-\psalmleftskip}##1}{}%
-     \setlength{\psalmchapindentlength}{\LettrineWidth}%
-     \addtolength{\psalmchapindentlength}{0.5em}%
-     }%
-   \def\par{%
-     \ifvmode
-       \let\vs\vslap
-       \noindent
-     \else
-       \def\vs####1{\hspace{-\psalmindent}\vslap{####1}\hspace{\psalmindent}}
-       \endgraf
-     \fi
-     \hangindent=3\psalmindent}
-   \let\obeyedline\obeylineend%
-   \obeylines%
-  }{%
-    \global\psalmdonetrue
-    \aftergroup\psalmlayout
-    \global\everypar{\aftergroup\restorelayout\global\psalmdonefalse\global\everypar{}}%
+  {\scripturesetup{%
+      chapter/format=\foreignlanguage{australian}{#1},
+      verse/format=\foreignlanguage{australian}{\textsuperscript{#1}}}%
   }
-
-\newcommand*{\bibleversion}{NIVUK}
-\newcommand{\formatbibleversion}{%
-  \def\empty@bibleversion{}%
-  \ifx\empty@bibleversion\bibleversion
-  \else
-    \space(\bibleversion)%
-  \fi}
-\newcommand{\formatbibleref}[1]{%
-  \textsbf{#1\formatbibleversion}}
-
-\newenvironment{biblequote}[1][]%
-  {%
-    \par
-    \global\psalmdonefalse
-    \parindent 1em
-    \biblequotefont
-    \def\biblequote@ref{#1}%
-    \def\empty@biblequote@ref{}%
-    \ifx\empty@biblequote@ref\biblequote@ref%
-      \def\biblequote@ref{}%
-    \else
-      \def\biblequote@ref{%
-        {\rightskip\z@\unskip\nobreak\hfil\penalty50\hskip2em\hbox{}\nobreak
-          \hfil\hbox{\formatbibleref{#1}}\parfillskip=0pt \finalhyphendemerits=0
-            \par}}%
-    \fi
-    \noindent\ignorespaces
-  }{%
-    \ifpsalmdone
-      \psalmlayout
-    \fi
-    \biblequote@ref
-  }
-
-\newenvironment{bookquote}[1][]%
-  {%
-    \renewcommand*{\biblequotefont}{\small}%
-    \renewcommand{\formatbibleref}[1]{(#1)}
-    \begin{biblequote}[#1]
-  }{%
-    \end{biblequote}
-  }
-
-\newenvironment{yellowbiblequote}[1][]{%
-  \begin{yellowquote}
-    \begin{biblequote}[#1]
+  {}
+\newenvironment{psalm}{%
+  \poetry[aboveskip=0pt, belowskip=0pt]
 }{%
-    \end{biblequote}
-  \end{yellowquote}
+  \endpoetry
 }
-
-\newenvironment{bluebookquote}[1][]{%
-  \begin{bluequote}
-    \begin{bookquote}[#1]
+\newenvironment{biblequote}{%
+  \scripture
 }{%
-    \end{bookquote}
-  \end{bluequote}
+  \endscripture
 }
-
-\newenvironment{greenbookquote}[1][]{%
-  \begin{greenbox}
-    \begin{bookquote}[#1]
+\newenvironment{bookquote}{%
+  \scripturesetup{font=\small, reference/format=(##1), version=}%
+  \scripture
 }{%
-    \end{bookquote}
-  \end{greenbox}
+  \endscripture
+}
+\newenvironment{yellowbiblequote}{%
+  \yellowquote
+  \scripture
+}{%
+  \endscripture
+  \endyellowquote
+}
+\newenvironment{bluebookquote}{%
+  \bluequote
+  \bookquote
+}{%
+  \endbookquote
+  \endbluequote
+}
+\newenvironment{greenbookquote}{%
+  \greenbox
+  \bookquote
+}{%
+  \endbookquote
+  \endgreenbox
 }
 
 \renewcommand\@makefntext[1]{%

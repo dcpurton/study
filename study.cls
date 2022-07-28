@@ -14,7 +14,7 @@
 % The Current Maintainer of this work is David Purton.
 %
 % This work consists of the files study.cls
-\ProvidesClass{study}[2022/06/01 Bible Study Class (DCP)]
+\ProvidesClass{study}[2022/07/28 Bible Study Class (DCP)]
 
 \RequirePackage{pdftexcmds}
 \RequirePackage{iftex}
@@ -129,6 +129,7 @@
   \RequirePackage[nil]{babel}
   \babelprovide[import,main,language=Default,hyphenrules=ukenglish]{australian}
   \babelprovide[import,language=Chinese Simplified]{chinese-simplified}
+  \babelprovide[import]{telugu}
   \babelfont{rm}[%
       Numbers = Proportional
    ]{Source Serif Pro}
@@ -165,6 +166,18 @@
       BoldFeatures = {SmallCapsFont = {Noto Sans CJK SC Medium}},
       BoldItalicFeatures = {SmallCapsFont = {Noto Sans CJK SC Medium}}
     ]{Noto Sans CJK SC DemiLight}
+  \babelfont[telugu]{rm}[%
+    Renderer = Harfbuzz,
+    ItalicFont = Noto Serif Telugu Light,
+    BoldFont = Noto Serif Telugu SemiBold,
+    BoldItalicFont = Noto Serif Telugu SemiBold
+  ]{Noto Serif Telugu Light}
+  \babelfont[telugu]{sf}[%
+    Renderer = Harfbuzz,
+    ItalicFont = Noto Sans Telugu Regular,
+    BoldFont = Noto Sans Telugu SemiBold,
+    BoldItalicFont = Noto Sans Telugu SemiBold
+  ]{Noto Sans Telugu Regular}
   \renewcommand\familydefault{\sfdefault}
   \def\sourcesansproextreme{\sourcesansproextremefamily}
   \def\sourcesansprolight{\sourcesansprolightfamily}

@@ -166,6 +166,11 @@
       BoldFeatures = {SmallCapsFont = {Noto Sans CJK SC Medium}},
       BoldItalicFeatures = {SmallCapsFont = {Noto Sans CJK SC Medium}}
     ]{Noto Sans CJK SC DemiLight}
+  \babelfont[chinese-simplified]{sourcesansprolight}[%
+      ItalicFont = Noto Sans CJK SC Thin,
+      BoldFont = Noto Sans CJK SC Medium,
+      BoldItalicFont = Noto Sans CJK SC Medium
+    ]{Noto Sans CJK SC Thin}
   \babelfont[telugu]{rm}[%
     Renderer = Harfbuzz,
     ItalicFont = Noto Serif Telugu Light,

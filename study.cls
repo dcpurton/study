@@ -14,7 +14,7 @@
 % The Current Maintainer of this work is David Purton.
 %
 % This work consists of the files study.cls
-\ProvidesClass{study}[2022/07/28 Bible Study Class (DCP)]
+\ProvidesClass{study}[2022/08/03 Bible Study Class (DCP)]
 
 \RequirePackage{pdftexcmds}
 \RequirePackage{iftex}
@@ -630,6 +630,8 @@
 
 % scripture quotation set up
 
+\newcommand*{\bibleversion}{NIVUK}
+
 \scripturesetup{%
   chapter/font=,
   font=\footnotesize,
@@ -637,7 +639,7 @@
   parskip=0pt plus 1pt,
   noindent,
   reference/font=\sbfseries,
-  version=NIVUK
+  version=\bibleversion
 }
 \@ifpackageloaded{babel}
   {\scripturesetup{%

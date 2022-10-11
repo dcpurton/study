@@ -663,7 +663,7 @@
   \endscripture
 }
 \newenvironment{bookquote}{%
-  \scripturesetup{font=\small, reference/format=(##1), version=}%
+  \scripturesetup{font=\small, reference/font=\mdseries, reference/format=##1, version=}%
   \scripture
 }{%
   \endscripture

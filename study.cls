@@ -14,7 +14,7 @@
 % The Current Maintainer of this work is David Purton.
 %
 % This work consists of the files study.cls
-\ProvidesClass{study}[2022/08/03 Bible Study Class (DCP)]
+\ProvidesClass{study}[2022/10/11 Bible Study Class (DCP)]
 
 \RequirePackage{pdftexcmds}
 \RequirePackage{iftex}
@@ -403,7 +403,7 @@
   colframe=PANTONE-P-142-8-C, left=2mm, right=2mm, fonttitle=\bfseries,
   pad at break*=0mm, fontupper=\greenboxfont, fontlower=\greenboxfont,
   segmentation style={solid, tcbcolframe, line width=0.5mm},
-  sidebyside align=top, before lower=\noindent, sidebyside gap=6.5mm,
+  sidebyside align=top seam, before lower=\noindent, sidebyside gap=6.5mm,
   before upper=\topskip 0pt\parindent
   1em\everypar{{\setbox0\lastbox}\@minipagefalse\everypar{}}}}
 \tcbset{yellowquote/.style={enhanced jigsaw, breakable, colback=white,

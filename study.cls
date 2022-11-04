@@ -14,7 +14,7 @@
 % The Current Maintainer of this work is David Purton.
 %
 % This work consists of the files study.cls
-\ProvidesClass{study}[2022/10/11 Bible Study Class (DCP)]
+\ProvidesClass{study}[2022/11/04 Bible Study Class (DCP)]
 
 \RequirePackage{pdftexcmds}
 \RequirePackage{iftex}
@@ -221,6 +221,10 @@
 \RequirePackage{setspace}
 \RequirePackage{titlesec}
 \RequirePackage{scripture}
+
+\setlength{\premulticols}{0pt}
+\setlength{\postmulticols}{0pt}
+\setlength{\multicolsep}{0pt}
 
 \setlength\LTleft\fill
 \setlength\LTright{0pt}

@@ -126,7 +126,7 @@
 }
 \defaultfontfeatures{Ligatures=TeX,RawFeature=+quotekern}
 \ifbabel
-  \RequirePackage[nil]{babel}
+  \RequirePackage{babel}
   \babelprovide[import,main,language=Default,hyphenrules=ukenglish]{australian}
   \babelprovide[import,language=Chinese Simplified]{chinese-simplified}
   \babelprovide[import]{telugu}
@@ -713,6 +713,10 @@
   BoldFont=Noto Color Emoji,
   BoldItalicFont=Noto Color Emoji,
   Renderer=Harfbuzz]
+
+\newfontfamily\emojibw{Noto Emoji}[
+  ItalicFont=Noto Emoji,
+  BoldItalicFont=Noto Emoji Bold]
 
 \tikzset{
   -|-/.style={

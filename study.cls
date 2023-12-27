@@ -14,7 +14,7 @@
 % The Current Maintainer of this work is David Purton.
 %
 % This work consists of the files study.cls
-\ProvidesClass{study}[2022/11/04 Bible Study Class (DCP)]
+\ProvidesClass{study}[2023/12/28 Bible Study Class (DCP)]
 
 \RequirePackage{pdftexcmds}
 \RequirePackage{iftex}
@@ -125,11 +125,14 @@
   }
 }
 \defaultfontfeatures{Ligatures=TeX,RawFeature=+quotekern}
+\RequirePackage{realscripts}
+\RequirePackage{microtype}
 \ifbabel
   \RequirePackage{babel}
   \babelprovide[import,main,language=Default,hyphenrules=ukenglish]{australian}
   \babelprovide[import,language=Chinese Simplified]{chinese-simplified}
   \babelprovide[import]{telugu}
+  \babelprovide[import]{japanese}
   \babelfont{rm}[%
       Numbers = Proportional
    ]{Source Serif Pro}
@@ -153,18 +156,18 @@
       BoldFont = Noto serif CJK SC SemiBold,
       BoldItalicFont = Noto Serif CJK SC SemiBold,
       UprightFeatures = {SmallCapsFont = {Noto Serif CJK SC Light}},
-      ItalicFeatures = {SmallCapsFont = {Noto Serif CJK SC Light}},
+      ItalicFeatures = {FakeSlant=0.15, SmallCapsFont = {Noto Serif CJK SC Light}},
       BoldFeatures = {SmallCapsFont = {Noto Serif CJK SC SemiBold}},
-      BoldItalicFeatures = {SmallCapsFont = {Noto Serif CJK SC SemiBold}}
+      BoldItalicFeatures = {FakeSlant=0.15, SmallCapsFont = {Noto Serif CJK SC SemiBold}}
     ]{Noto Serif CJK SC Light}
   \babelfont[chinese-simplified]{sf}[%
       ItalicFont = Noto Sans CJK SC DemiLight,
       BoldFont = Noto Sans CJK SC Medium,
       BoldItalicFont = Noto Sans CJK SC Medium,
       UprightFeatures = {SmallCapsFont = {Noto Sans CJK SC DemiLight}},
-      ItalicFeatures = {SmallCapsFont = {Noto Sans CJK SC DemiLight}},
+      ItalicFeatures = {FakeSlant=0.15, SmallCapsFont = {Noto Sans CJK SC DemiLight}},
       BoldFeatures = {SmallCapsFont = {Noto Sans CJK SC Medium}},
-      BoldItalicFeatures = {SmallCapsFont = {Noto Sans CJK SC Medium}}
+      BoldItalicFeatures = {FakeSlant=0.15, SmallCapsFont = {Noto Sans CJK SC Medium}}
     ]{Noto Sans CJK SC DemiLight}
   \babelfont[chinese-simplified]{sourcesansprolight}[%
       ItalicFont = Noto Sans CJK SC Thin,
@@ -183,17 +186,67 @@
     BoldFont = Noto Sans Telugu SemiBold,
     BoldItalicFont = Noto Sans Telugu SemiBold
   ]{Noto Sans Telugu Regular}
+  \babelfont[japanese]{rm}[%
+      ItalicFont = Noto Serif CJK JP Light,
+      BoldFont = Noto serif CJK JP SemiBold,
+      BoldItalicFont = Noto Serif CJK JP SemiBold,
+      UprightFeatures = {SmallCapsFont = {Noto Serif CJK JP Light}},
+      ItalicFeatures = {FakeSlant=0.15, SmallCapsFont = {Noto Serif CJK JP Light}},
+      BoldFeatures = {SmallCapsFont = {Noto Serif CJK JP SemiBold}},
+      BoldItalicFeatures = {FakeSlant=0.15, SmallCapsFont = {Noto Serif CJK JP SemiBold}}
+    ]{Noto Serif CJK JP Light}
+  \babelfont[japanese]{sf}[%
+      ItalicFont = Noto Sans CJK JP DemiLight,
+      BoldFont = Noto Sans CJK JP Medium,
+      BoldItalicFont = Noto Sans CJK JP Medium,
+      UprightFeatures = {SmallCapsFont = {Noto Sans CJK JP DemiLight}},
+      ItalicFeatures = {FakeSlant=0.15, SmallCapsFont = {Noto Sans CJK JP DemiLight}},
+      BoldFeatures = {SmallCapsFont = {Noto Sans CJK JP Medium}},
+      BoldItalicFeatures = {FakeSlant=0.15, SmallCapsFont = {Noto Sans CJK JP Medium}}
+    ]{Noto Sans CJK JP DemiLight}
+  \babelfont[japanese]{sourcesansprolight}[%
+      ItalicFont = Noto Sans CJK JP Thin,
+      BoldFont = Noto Sans CJK JP Medium,
+      BoldItalicFont = Noto Sans CJK JP Medium
+    ]{Noto Sans CJK JP Thin}
   \renewcommand\familydefault{\sfdefault}
   \def\sourcesansproextreme{\sourcesansproextremefamily}
   \def\sourcesansprolight{\sourcesansprolightfamily}
   \babelcharproperty{`“}{linebreak}{op}
+  \expandafter\addto\csname extraschinese-simplified\endcsname{\onehalfspacing}
+  \SetProtrusion
+    {encoding=TU,
+     family=NotoSansCJKSCDemiLight}
+    {
+     “ ={600,},
+     ” ={,600},
+     、={,700},
+     。={,700},
+     ！={,700},
+     ，={,700},
+     ：={,700},
+     ；={,700},
+     ？={,500},
+     }
+  \SetProtrusion
+    {encoding=TU,
+     family=NotoSansCJKJPDemiLight}
+    {
+     、={,600},
+     。={,600},
+     「={450,},
+     」={,450},
+     ！={,600},
+     ，={,600},
+     ：={,600},
+     ；={,600},
+     ？={,500},
+     }
 \else
   \RequirePackage[proportional,default]{sourcesanspro}
 \fi
 
 \RequirePackage{xpatch}
-\RequirePackage{realscripts}
-\RequirePackage{microtype}
 \RequirePackage{lettrine}
 \RequirePackage[headings]{nccfancyhdr}
 \RequirePackage{footmisc}
@@ -205,7 +258,8 @@
 \RequirePackage{graphicx}
 \RequirePackage[table,cmyk]{xcolor}
 \RequirePackage{luacolor}
-\RequirePackage[normalem]{ulem}
+\RequirePackage{lua-ul}
+\let\uline\underLine
 \RequirePackage{multicol}
 \RequirePackage{tabularx}
 \RequirePackage{xltabular}
@@ -417,6 +471,8 @@
   fontlower=\yellowquotefont,
   before upper=\topskip 0pt, sidebyside align=top seam, sidebyside gap=6.5mm,
   hyphenationfix}}
+\tcbset{firstpart/.style={skin=enhancedfirst, bottom=0pt}}
+\tcbset{lastpart/.style={skin=enhancedlast, top=0pt}}
 
 \newtcolorbox{greenbox}[1][]{greenbox,#1}
 \newtcolorbox{yellowquote}[1][]{yellowquote,#1}
@@ -607,22 +663,14 @@
 
 \setcounter{secnumdepth}{2}
 
-\renewcommand\section{\@startsection{section}{1}{\z@}%
-  {-2.75ex \@plus -1ex \@minus -.2ex}%
-  {1.5ex \@plus .2ex}%
-  {\flushleft\normalfont\large\bfseries}}
-\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
-  {-2.5ex\@plus -1ex \@minus -.2ex}%
-  {1.25ex \@plus .2ex}%
-  {\flushleft\normalfont\normalsize\bfseries}}
-\renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
-  {-2.25ex\@plus -1ex \@minus -.2ex}%
-  {1ex \@plus .2ex}%
-  {\flushleft\normalfont\normalsize\sourcesansprolight\bfseries}}
-\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
-  {-2ex\@plus -0.8ex \@minus -.1ex}%
-  {0.8ex \@plus .1ex}%
-  {\flushleft\normalfont\normalsize\itshape}}
+\titleformat{\section}{\flushleft\normalfont\large\bfseries}{\thesection}{1em}{}
+\titlespacing*{\section}{0pt}{2.75ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+\titleformat{\subsection}{\flushleft\normalfont\normalsize\bfseries}{\thesubsection}{1em}{}
+\titlespacing*{\subsection}{0pt}{2.5ex plus 1ex minus .2ex}{1.25ex plus .2ex}
+\titleformat{\subsubsection}{\flushleft\normalfont\normalsize\sourcesansprolight\bfseries}{\thesubsubsection}{1em}{}
+\titlespacing*{\subsubsection}{0pt}{2.25ex plus 1ex minus .2ex}{1ex plus .2ex}
+\titleformat{\paragraph}{\flushleft\normalfont\normalsize\itshape}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}{0pt}{2ex plus .8ex minus .1ex}{.8ex plus .1ex}
 
 \ifbookclass
   \titleformat{\chapter}{\normalfont\Large\bfseries}{}{0pt}{}
@@ -649,6 +697,14 @@
   noindent,
   reference/font=\sbfseries,
   version=\bibleversion
+}
+\scripturestyle{ccb}{
+  language=chinese-simplified,
+  version=CCB,
+  selah/format=(#1),
+  selah/text=细拉,
+  poetry/indent=0em,
+  poetry/bigindent=2em
 }
 \@ifpackageloaded{babel}
   {\scripturesetup{%
@@ -1340,7 +1396,7 @@
             \hbox_overlap_right:n { \l__study_field_text_tl }
           }
         \leaders
-        \hrule
+        \hrule height -1.6pt depth 2pt
         \skip_horizontal:N \l__study_field_wd_skip
         \strut
       }
